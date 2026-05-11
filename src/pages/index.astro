@@ -1,4 +1,4 @@
-﻿---
+---
 // src/pages/index.astro - FINAL REDESIGN: Ecosystem + Education
 import { getCollection } from 'astro:content';
 import Base from "@/layouts/Base.astro";
@@ -772,8 +772,23 @@ const matrixCategories = [...new Set(allPostsRaw.map(p => p.data.category))].sli
       <div style="font-size: 48px; margin-bottom: 16px;">🚀</div>
       <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 12px; color: #60a5fa; text-align: center;">Stay Ahead in Crypto</h2>
       <p style="color: #cbd5e1; margin-bottom: 20px; line-height: 1.5; text-align: center;">Get exclusive DeFi insights, airdrop alerts & alpha directly to your inbox.<br><span style="color: #10b981; font-weight: 600;">No spam, just pure value.</span></p>
-      <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
-      <iframe src="https://subscribe-forms.beehiiv.com/62d85daa-7878-4a83-a78a-a15f6226c516" class="beehiiv-embed" data-test-id="beehiiv-embed" frameborder="0" scrolling="no" style="width: 508px; height: 198px; margin: 0; border-radius: 0px !important; background-color: transparent; box-shadow: 0 0 #0000; max-width: 100%;"></iframe>
+      <form id="txchyon-popup-form" style="margin-top: 20px;">
+        <input 
+          type="email" 
+          id="popup-email" 
+          placeholder="Enter your email" 
+          required 
+          style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #475569; background: rgba(255,255,255,0.05); color: white; margin-bottom: 12px; box-sizing: border-box;"
+        />
+        <button 
+          type="submit" 
+          id="popup-submit"
+          style="width: 100%; padding: 12px; background: linear-gradient(to r, #06b6d4, #2563eb); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;"
+        >
+          Initialize Sync →
+        </button>
+      </form>
+      <div id="popup-message" style="margin-top: 12px; font-size: 14px; display: none;"></div>
       <button id="close-popup" style="margin-top: 20px; padding: 10px 20px; background: #374151; color: #d1d5db; border: none; border-radius: 8px; cursor: pointer; font-weight: 500; transition: all 0.2s ease;">No thanks, I'll miss out on alpha</button>
     </div>
   </dialog>
@@ -792,6 +807,54 @@ const matrixCategories = [...new Set(allPostsRaw.map(p => p.data.category))].sli
       }
       setTimeout(showPopup, 30000);
       closeButton.addEventListener('click', () => popup.close());
+
+      const form = document.getElementById('txchyon-popup-form');
+      const emailInput = document.getElementById('popup-email');
+      const submitBtn = document.getElementById('popup-submit');
+      const message = document.getElementById('popup-message');
+
+      if (form) {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const email = emailInput.value.trim();
+          
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Processing...';
+          message.style.color = '#60a5fa';
+          message.textContent = 'Syncing with network...';
+          message.style.display = 'block';
+
+          try {
+            const result = await window.subscribeToBeehiiv({
+              email: email,
+              tags: ['crypto', 'homepage_popup'],
+              utm_medium: 'homepage_popup',
+              utm_campaign: 'txchyon_home'
+            });
+
+            if (result === true || result === "already_subscribed") {
+              localStorage.setItem('txchyon_subscriber', 'true');
+              localStorage.setItem('txchyon_subscriber_email', email);
+              message.style.color = '#10b981';
+              message.textContent = '🎉 Access Granted! Redirecting...';
+              submitBtn.textContent = '✓ Subscribed';
+              setTimeout(() => {
+                popup.close();
+              }, 2000);
+            } else {
+              message.style.color = '#f87171';
+              message.textContent = '❌ Failed. Please try again.';
+              submitBtn.disabled = false;
+              submitBtn.textContent = 'Initialize Sync →';
+            }
+          } catch (err) {
+            message.style.color = '#f87171';
+            message.textContent = '❌ Error occurred.';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Initialize Sync →';
+          }
+        });
+      }
     });
   </script>
 

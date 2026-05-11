@@ -1,33 +1,77 @@
----
-// src/components/BeehiivEmbed.astro
-const BEEHIIV_EMBED_ID = import.meta.env.PUBLIC_BEEHIIV_EMBED_ID || 'your-id';
----
+<div class="beehiiv-secure-form-container">
+  <form id="beehiiv-embed-form" class="flex flex-col sm:flex-row gap-2">
+    <input 
+      type="email" 
+      id="beehiiv-embed-email" 
+      placeholder="Your email address" 
+      required
+      class="flex-1 px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-cyan-500 transition-all"
+    />
+    <button 
+      type="submit" 
+      id="beehiiv-embed-submit"
+      class="px-6 py-2 bg-cyan-500 text-black font-bold text-sm rounded-lg hover:bg-white transition-all whitespace-nowrap"
+    >
+      Subscribe
+    </button>
+  </form>
+  <div id="beehiiv-embed-message" class="mt-2 text-[10px] hidden"></div>
+</div>
 
-<iframe 
-  src={`https://embeds.beehiiv.com/${BEEHIIV_EMBED_ID}?slim=1`}
-  data-test-id="beehiiv-embed" 
-  height="52" 
-  frameborder="0" 
-  scrolling="no" 
-  style="margin: 0; border-radius: 0px !important; background-color: transparent; width: 100%;"
-  onload="handleBeehiivLoad()"
-></iframe>
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('beehiiv-embed-form');
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const emailInput = document.getElementById('beehiiv-embed-email');
+        const submitBtn = document.getElementById('beehiiv-embed-submit');
+        const message = document.getElementById('beehiiv-embed-message');
+        const email = emailInput.value.trim();
 
-<script>
-  function handleBeehiivLoad() {
-    // Listen for Beehiiv success messages
-    window.addEventListener('message', function(event) {
-      if (event.data && event.data.type === 'beehiiv:subscription:success') {
-        unlockContent();
-        
-        // Send to analytics
-        if (typeof gtag !== 'undefined') {
-          gtag('event', 'newsletter_signup', {
-            'event_category': 'Conversion',
-            'event_label': 'Beehiiv Gate'
+        submitBtn.disabled = true;
+        submitBtn.textContent = '...';
+        message.className = 'mt-2 text-[10px] text-cyan-400';
+        message.textContent = 'Syncing...';
+        message.classList.remove('hidden');
+
+        try {
+          // @ts-ignore
+          const result = await window.subscribeToBeehiiv({
+            email: email,
+            tags: ['crypto', 'embed_component'],
+            utm_medium: 'embed_component',
+            utm_campaign: window.location.pathname
           });
+
+          if (result === true || result === "already_subscribed") {
+            localStorage.setItem('txchyon_subscriber', 'true');
+            localStorage.setItem('txchyon_subscriber_email', email);
+            
+            message.className = 'mt-2 text-[10px] text-green-400';
+            message.textContent = '🎉 Subscribed!';
+            submitBtn.textContent = '✓';
+            
+            // Call global unlock if available
+            if (window.unlockContent) window.unlockContent();
+            
+            // Analytics
+            if (typeof gtag !== 'undefined') {
+              gtag('event', 'newsletter_signup', { 'event_category': 'Conversion', 'event_label': 'Beehiiv Embed' });
+            }
+          } else {
+            message.className = 'mt-2 text-[10px] text-red-400';
+            message.textContent = '❌ Failed.';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Subscribe';
+          }
+        } catch (err) {
+          message.className = 'mt-2 text-[10px] text-red-400';
+          message.textContent = '❌ Error.';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Subscribe';
         }
-      }
-    });
-  }
+      });
+    }
+  });
 </script>

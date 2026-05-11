@@ -1,4 +1,4 @@
-﻿---
+---
 // src/components/GatedContent.astro
 const BEEHIIV_FORM_ID = "62d85daa-7878-4a83-a78a-a15f6226c516";
 
@@ -21,20 +21,30 @@ console.log("  - Has slot content?:", Astro.slots.has("default"));
       <h3>Unlock the Full Guide</h3>
       <p>Pepe, the technical steps and visual walkthroughs are reserved for our community. Join 12,000+ builders to get your Free Txchyon Library Card.</p>
       
-      <!-- YOUR Beehiiv Embedded Form -->
+      <!-- Secure Beehiiv Form -->
       <div id="beehiiv-embed-container">
-        <iframe 
-          src="https://subscribe-forms.beehiiv.com/62d85daa-7878-4a83-a78a-a15f6226c516" 
-          class="beehiiv-embed" 
-          data-test-id="beehiiv-embed" 
-          frameborder="0" 
-          scrolling="no" 
-          style="width: 100%; height: 52px; margin: 0; border-radius: 0px 0px 0px 0px !important; background-color: transparent; box-shadow: 0 0 #0000; max-width: 100%;"
-        ></iframe>
+        <form id="gated-content-form" class="space-y-3">
+          <input 
+            type="email" 
+            id="gated-email" 
+            placeholder="Enter your email" 
+            required
+            style="width: 100%; padding: 12px; border: 2px solid #000; font-family: inherit;"
+          />
+          <button 
+            type="submit" 
+            id="gated-submit"
+            class="unlock-btn"
+            style="width: 100%; margin-top: 0;"
+          >
+            Unlock Now
+          </button>
+        </form>
+        <div id="gated-message" class="mt-2 text-xs hidden" style="margin-top: 8px; font-size: 12px; color: #06b6d4;"></div>
       </div>
       
       <div class="already-subscribed">
-        <button onclick="unlockContent()" class="unlock-btn">
+        <button onclick="unlockContent()" class="unlock-btn" style="background: transparent; color: #666; border: 1px solid #ccc; font-weight: normal; padding: 0.5rem 1rem;">
           Already subscribed? Click here
         </button>
       </div>
@@ -158,6 +168,48 @@ console.log("  - Has slot content?:", Astro.slots.has("default"));
       overlay.style.display = "none";
     }
   }
+
+  // Handle Form Submission
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('gated-content-form');
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const emailInput = document.getElementById('gated-email');
+        const submitBtn = document.getElementById('gated-submit');
+        const message = document.getElementById('gated-message');
+        const email = emailInput.value.trim();
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Unlocking...';
+        message.textContent = 'Syncing...';
+        message.classList.remove('hidden');
+
+        try {
+          // @ts-ignore
+          const result = await window.subscribeToBeehiiv({
+            email: email,
+            tags: ['crypto', 'component_gate'],
+            utm_medium: 'component_gate',
+            utm_campaign: window.location.pathname
+          });
+
+          if (result === true || result === "already_subscribed") {
+            localStorage.setItem('txchyon_subscriber_email', email);
+            unlockContent();
+          } else {
+            message.textContent = '❌ Failed. Try again.';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Unlock Now';
+          }
+        } catch (err) {
+          message.textContent = '❌ Error occurred.';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Unlock Now';
+        }
+      });
+    }
+  });
   
   // Check if already subscribed
   function checkSubscription() {
