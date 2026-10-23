@@ -1,26 +1,29 @@
 ---
 // Redirect pages for old single-segment URLs such as /blog/some-article -> /blog/category/some-article.
-// Cloudflare Pages only applies the first ~120 rules of public/_redirects, so the rest of the legacy
-// /blog/<slug> rules are also generated here as static pages. If the host applies the _redirects rule first,
-// this page is simply never served.
+// Cloudflare Pages only applies the first ~120 rules of public/_redirects, so the legacy /blog/<slug>
+// rules are also generated here as static pages. Rules disabled in _redirects with "# disabled-legacy"
+// (target missing) are read too, so those URLs end at the homepage instead of a 404.
+// If the host applies a _redirects rule first, the matching page is simply never served.
 import fs from "node:fs";
 import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
   const text = fs.readFileSync("public/_redirects", "utf8").replace(/^﻿/, "");
-  // only redirect to articles that exist; anything else goes to the homepage
   const published = new Set((await getCollection("posts", ({ data }) => !data.draft)).map((p) => `/blog/${p.slug}`));
-  const seen = new Set<string>();
-  const paths: { params: { legacy: string }; props: { target: string } }[] = [];
-  for (const line of text.split(/\r?\n/)) {
-    if (!line.trim() || line.trim().startsWith("#")) continue;
-    const [from, to] = line.trim().split(/\s+/);
+  const targets = new Map<string, string>(); // slug -> first valid target, or "/"
+  for (const raw of text.split(/\r?\n/)) {
+    const line = raw.trim().replace(/^#\s*disabled-legacy[^:]*:\s*/, "");
+    if (!line || line.startsWith("#")) continue;
+    const [from, to] = line.split(/\s+/);
     const m = from?.match(/^\/blog\/([^/*:]+)$/);
-    if (!m || !to || !to.startsWith("/") || seen.has(m[1]) || m[1] === "page") continue;
-    seen.add(m[1]);
-    paths.push({ params: { legacy: m[1] }, props: { target: to.startsWith("/blog/") && !published.has(to.replace(/\/$/, "")) ? "/" : to } });
+    if (!m || !to || !to.startsWith("/") || m[1] === "page") continue;
+    const slug = m[1];
+    const clean = to.replace(/\/$/, "");
+    const valid = clean !== from && (to.startsWith("/blog/") ? published.has(clean) : true);
+    if (!targets.has(slug)) targets.set(slug, "/");
+    if (valid && targets.get(slug) === "/") targets.set(slug, to);
   }
-  return paths;
+  return [...targets].map(([legacy, target]) => ({ params: { legacy }, props: { target } }));
 }
 
 const { target } = Astro.props;
