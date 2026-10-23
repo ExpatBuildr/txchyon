@@ -23,7 +23,7 @@ export const GET: APIRoute = async ({ site }) => {
 
       return {
         title: String(post.data.title || "Untitled Post"),
-        description: String(post.data.description || "New on-chain alpha from Txchyon Capital"),
+        description: String(post.data.description || "New on-chain alpha from Txchyon"),
         link: link,
         date: new Date(post.data.date).toISOString(),
       };

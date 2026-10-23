@@ -78,4 +78,4 @@ Pick any one of the three and you're invisible again in under five minutes.
 See you on-chain (anonymously).
 
 — Galaxy (@galaxybuilt)  
-Say gm → news@txchyon.com
+Say gm → contact@txchyon.com

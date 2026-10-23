@@ -17,7 +17,7 @@ draft: false
 
 # AlignerZ Launchpad: The First Truly Aligned Launchpad — Why This Changes Everything in Web3
 
-**Author:** GalaxyBuilt  
+**Author:** ExpatBuildr  
 **Date:** November 25, 2025  
 **Follow me on X:** [@galaxybuilt](https://x.com/galaxybuilt)  
 

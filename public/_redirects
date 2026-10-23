@@ -315,3 +315,7 @@
 
 # Services page archived
 /services  /  301
+
+# Shop waitlist page archived
+# /New folder  /  301 (literal space is not valid in a redirect source; only the encoded rule below is active)
+/New%20folder  /  301

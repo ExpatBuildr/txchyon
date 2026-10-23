@@ -4,9 +4,8 @@ meta_title: "Galaxy"
 image: /images/authors/galaxy.jpg
 description: Founder of Txchyon Capital & Txchyon Labs
 social:
-  linkedin: https://www.linkedin.com/in/galaxybuilt/
-  x: https://x.com/galaxybuilt
-  website: https://galaxybuilt.dev/
+  x: https://x.com/expatbuilder
+  website: https://expatbuildr.com/
 ---
 
 Founder of Txchyon Capital & Txchyon Labs

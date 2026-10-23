@@ -14,7 +14,7 @@
     "pagination": 6
   },
   "metadata": {
-    "meta_author": "GalaxyBuilt",
+    "meta_author": "ExpatBuildr",
     "meta_image": "https://txchyon.com/images/og-txchyon.png",
     "meta_description": "A small lab that researches crypto trading strategies and builds the software to test them. Nothing here is for sale."
   },
@@ -24,12 +24,10 @@
   },
   "params": {
     "contact_form_action": "https://formspree.io/f/xzznjdnr",
-    "copyright": "© 2026 Txchyon Capital"
+    "copyright": "© 2026 Txchyon"
   },
   "contactinfo": {
-    "address": "Scottsdale, AZ",
-    "email": "contact@txchyon.com",
-    "phone": "+63 9613092580"
+    "email": "contact@txchyon.com"
   },
   "social": {
     "twitter": "https://twitter.com/txchyon",
@@ -42,9 +40,9 @@
   },
   "author": {
     "name": "Galaxy",
-    "bio": "Founder of Txchyon Capital, a private on-chain research and media firm.",
+    "bio": "Founder of Txchyon, a private on-chain research and media firm.",
     "avatar": "/images/avatar.jpg",
-    "twitter": "https://x.com/galaxybuilt"
+    "twitter": "https://x.com/expatbuilder"
   },
   "branding": {
     "blog_name": "Txchyon",
