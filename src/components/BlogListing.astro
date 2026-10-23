@@ -37,12 +37,12 @@ const counts: Record<string, number> = {};
 for (const p of posts) counts[p.data.category] = (counts[p.data.category] ?? 0) + 1;
 const categories = Object.entries(counts).sort((a, b) => b[1] - a[1]);
 
-const fmtDate = (d: Date | string) =>
-  new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
-const minutes = (body?: string) => Math.max(1, Math.round((body?.match(/\S+/g)?.length ?? 0) / 220));
+const fmtMonth = (d: Date | string) =>
+  new Date(d).toLocaleDateString("en-US", { month: "long", year: "numeric", timeZone: "UTC" });
+const fmtDay = (d: Date | string) =>
+  new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
 
 const pageHref = (n: number) => (n === 1 ? "/blog" : `/blog/page/${n}`);
-const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 ---
 
 <section class="lab-section first">
@@ -59,28 +59,38 @@ const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
 <section class="lab-section tight">
   <div>
-    {pagePosts.map((p) => (
-      <a class="entry" href={`/blog/${p.slug}`}>
-        <b>{p.data.title}</b>
-        <span class="desc">{p.data.description}</span>
-        <span class="meta">{label(p.data.category)} · {fmtDate(p.data.date)} · {minutes(p.body)} min read</span>
-      </a>
-    ))}
+    {pagePosts.map((p, idx) => {
+      const month = fmtMonth(p.data.date);
+      const showMonth = idx === 0 || month !== fmtMonth(pagePosts[idx - 1].data.date);
+      return (
+        <Fragment>
+          {showMonth && <div class="month">{month}</div>}
+          <a class="entry" href={`/blog/${p.slug}`}>
+            <span class="date">{fmtDay(p.data.date)}</span>
+            <span>
+              <b>{p.data.title}</b>
+              {p.data.description && <span class="desc">{p.data.description}</span>}
+            </span>
+            <span class="cat">{label(p.data.category)}</span>
+          </a>
+        </Fragment>
+      );
+    })}
   </div>
 
   {totalPages > 1 && (
     <nav class="pager" aria-label="Blog pages">
-      {page > 1 ? <a href={pageHref(page - 1)} rel="prev">← Newer</a> : <span class="off">← Newer</span>}
-      <span class="nums">
-        {pageNumbers.map((n) =>
-          n === page ? (
-            <span class="cur" aria-current="page">{n}</span>
-          ) : (
-            <a href={pageHref(n)}>{n}</a>
-          )
-        )}
-      </span>
-      {page < totalPages ? <a href={pageHref(page + 1)} rel="next">Older →</a> : <span class="off">Older →</span>}
+      {page > 1 ? (
+        <a href={pageHref(page - 1)} rel="prev">← Newer</a>
+      ) : (
+        <span></span>
+      )}
+      <span class="count">Page {page} of {totalPages}</span>
+      {page < totalPages ? (
+        <a href={pageHref(page + 1)} rel="next">Older →</a>
+      ) : (
+        <span></span>
+      )}
     </nav>
   )}
 </section>
