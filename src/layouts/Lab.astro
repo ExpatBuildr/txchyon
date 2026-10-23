@@ -1,0 +1,198 @@
+---
+// Shared shell for pages that use the homepage style (dark/light theme, IBM Plex,
+// simple header and footer). The homepage (src/pages/index.astro) carries its own copy
+// of these styles; new pages should use this layout.
+import { socials } from "@/lib/socials";
+
+interface Props {
+  title: string;
+  description: string;
+  canonical: string; // path, e.g. "/blog"
+  image?: string;
+  prev?: string; // path of previous page in a series
+  next?: string; // path of next page in a series
+  noindex?: boolean;
+}
+
+const { title, description, canonical, image = "/images/og-txchyon.png", prev, next, noindex = false } = Astro.props;
+const site = "https://txchyon.com";
+const url = site + canonical;
+const path = Astro.url.pathname;
+const inBlog = path === "/blog" || path.startsWith("/blog/");
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />
+    <link rel="canonical" href={url} />
+    {prev && <link rel="prev" href={site + prev} />}
+    {next && <link rel="next" href={site + next} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={url} />
+    <meta property="og:image" content={image.startsWith("http") ? image : site + image} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/images/favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="Txchyon" href="/rss.xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    />
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-W77T47Y58P"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-W77T47Y58P');
+    </script>
+
+    <!-- Ahrefs Analytics -->
+    <script src="https://analytics.ahrefs.com/analytics.js" data-key="BM9NrhHESqRca7xP0Vuqeg" async></script>
+
+    <script is:inline>
+      // Same storage key the rest of the site uses.
+      try {
+        var t = localStorage.getItem("txchyon-theme");
+        if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    </script>
+
+    <style is:global>
+      :root,
+      :root[data-theme="dark"] {
+        --bg: #0b0d12;
+        --card: #141824;
+        --tx: #e8ecf5;
+        --mut: #a1a8b6;
+        --line: #222a3b;
+        --on: #ffd23f;
+        --on-tx: #111111;
+        --acc: #ffd23f;
+        --acc-line: #4a3f10;
+        --logo: none;
+      }
+      :root[data-theme="light"] {
+        --bg: #fafafa;
+        --card: #ffffff;
+        --tx: #15171c;
+        --mut: #565d6b;
+        --line: #e2e4e9;
+        --on: #15171c;
+        --on-tx: #fafafa;
+        --acc: #15171c;
+        --acc-line: #c9ccd3;
+        --logo: brightness(0);
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--tx);
+        font-family: "IBM Plex Sans", system-ui, sans-serif;
+        font-size: 17px;
+        line-height: 1.65;
+        min-height: 100vh;
+      }
+      a { color: inherit; }
+      a:hover { opacity: 0.75; }
+      a:focus-visible, button:focus-visible { outline: 2px solid var(--acc); outline-offset: 3px; }
+      .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+      .lab-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 28px 0; border-bottom: 1px solid var(--line); }
+      .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+      .brand img { width: 32px; height: 32px; object-fit: contain; filter: var(--logo); }
+      .brand span { font-weight: 700; font-size: 20px; letter-spacing: -0.3px; }
+      .lab-header nav { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; font-size: 15px; }
+      .lab-header nav a { text-decoration: none; color: var(--mut); }
+      .lab-header nav a[aria-current="page"] { color: var(--tx); }
+      button { font: inherit; cursor: pointer; }
+      .theme-btn { font-size: 14px; color: var(--tx); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; min-height: 40px; }
+      .lab-section { padding: 48px 0; display: flex; flex-direction: column; gap: 24px; }
+      .lab-section.first { padding: 72px 0 40px; gap: 20px; }
+      .lab-wrap h1 { margin: 0; font-size: clamp(36px, 5.5vw, 56px); line-height: 1.1; font-weight: 700; letter-spacing: -1.2px; text-wrap: balance; }
+      .lab-wrap h2 { margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+      .lab-wrap p { margin: 0; }
+      .lead { max-width: 620px; font-size: 19px; color: var(--mut); }
+      .mut { color: var(--mut); }
+      .tag { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 13px; color: var(--acc); border: 1px solid var(--acc-line); border-radius: 999px; padding: 4px 12px; text-decoration: none; white-space: nowrap; }
+      [hidden] { display: none !important; }
+      .icons { display: flex; align-items: center; gap: 4px; }
+      .icons a { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 999px; color: var(--mut); }
+      .icons svg { width: 20px; height: 20px; fill: currentColor; }
+      .lab-footer { padding: 32px 0 48px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: 14px; color: var(--mut); }
+      .lab-footer .legal { max-width: 520px; }
+      .lab-footer .foot-left { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+      .lab-footer .icons { margin-left: -10px; }
+      @media (max-width: 520px) { .lab-section.first { padding: 48px 0 32px; } }
+    </style>
+  </head>
+  <body>
+    <div class="wrap lab-wrap">
+      <header class="lab-header">
+        <a href="/" class="brand">
+          <img src="/images/landing/logo.png" alt="" width="32" height="32" />
+          <span>Txchyon</span>
+        </a>
+        <nav aria-label="Main">
+          <a href="/#software">Software</a>
+          <a href="/#notes">Lab notes</a>
+          <a href="/blog" aria-current={inBlog ? "page" : undefined}>Blog</a>
+          <span class="icons">
+            {socials.filter((s) => s.header).map((s) => (
+              <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.name} title={s.name}>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d={s.d} /></svg>
+              </a>
+            ))}
+          </span>
+          <button type="button" class="theme-btn" id="themeBtn" aria-label="Switch light or dark mode">Light mode</button>
+        </nav>
+      </header>
+
+      <slot />
+
+      <footer class="lab-footer">
+        <div class="foot-left">
+          <span>© 2026 Txchyon</span>
+          <div class="icons">
+            {socials.map((s) => (
+              <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.name} title={s.name}>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d={s.d} /></svg>
+              </a>
+            ))}
+          </div>
+          <span>Built by <a href="https://x.com/expatbuilder" target="_blank" rel="noopener noreferrer">ExpatBuildr</a></span>
+        </div>
+        <span class="legal">
+          Research and software only. Not investment advice. Nothing on this site is for sale, and we don't give signals or manage money. Some
+          older articles contain affiliate links; see the <a href="/disclaimer">disclaimer</a>.
+        </span>
+      </footer>
+    </div>
+
+    <script is:inline>
+      (function () {
+        var root = document.documentElement;
+        var btn = document.getElementById("themeBtn");
+        function label() {
+          btn.textContent = root.getAttribute("data-theme") === "dark" ? "Light mode" : "Dark mode";
+        }
+        label();
+        btn.addEventListener("click", function () {
+          var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+          root.setAttribute("data-theme", next);
+          try { localStorage.setItem("txchyon-theme", next); } catch (e) {}
+          label();
+        });
+      })();
+    </script>
+  </body>
+</html>

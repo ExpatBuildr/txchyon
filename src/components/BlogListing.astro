@@ -1,0 +1,125 @@
+---
+// Blog listing in the homepage style. Used by /blog (page 1) and /blog/page/N.
+import { getCollection } from "astro:content";
+
+interface Props {
+  page: number;
+}
+
+const { page } = Astro.props;
+const pageSize = 12; // keep in sync with getStaticPaths in src/pages/blog/page/[page].astro
+
+const categoryLabels: Record<string, string> = {
+  "getting-started": "Getting started",
+  "security-privacy": "Security & privacy",
+  "trading-investing": "Trading",
+  "defi-yield": "DeFi & yield",
+  "airdrop-farming": "Airdrops",
+  "infrastructure-tech": "Infrastructure",
+  "tools-automation": "Tools",
+  "research-analysis": "Research",
+  "regulatory-tax": "Regulation & tax",
+  "portfolio-management": "Portfolio",
+  "prediction-markets": "Prediction markets",
+  "alpha-insider": "Alpha",
+  "web3-gaming-metaverse": "Web3 gaming",
+};
+const label = (c: string) => categoryLabels[c] ?? c;
+
+const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+
+const totalPages = Math.ceil(posts.length / pageSize);
+const pagePosts = posts.slice((page - 1) * pageSize, page * pageSize);
+
+const counts: Record<string, number> = {};
+for (const p of posts) counts[p.data.category] = (counts[p.data.category] ?? 0) + 1;
+const categories = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+
+const fmtDate = (d: Date | string) =>
+  new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+const minutes = (body?: string) => Math.max(1, Math.round((body?.match(/\S+/g)?.length ?? 0) / 220));
+
+const pageHref = (n: number) => (n === 1 ? "/blog" : `/blog/page/${n}`);
+const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+---
+
+<section class="lab-section first">
+  <h1>Blog</h1>
+  <p class="lead">
+    Guides on crypto trading, DeFi, airdrops, security and tax. {posts.length} articles, newest first.
+  </p>
+  <div class="chips" aria-label="Categories">
+    {categories.map(([slug, n]) => (
+      <a class="tag" href={`/categories/${slug}`}>{label(slug)} · {n}</a>
+    ))}
+  </div>
+</section>
+
+<section class="lab-section list">
+  <div>
+    {pagePosts.map((p) => (
+      <a class="entry" href={`/blog/${p.slug}`}>
+        <b>{p.data.title}</b>
+        <span class="desc">{p.data.description}</span>
+        <span class="meta">{label(p.data.category)} · {fmtDate(p.data.date)} · {minutes(p.body)} min read</span>
+      </a>
+    ))}
+  </div>
+
+  {totalPages > 1 && (
+    <nav class="pager" aria-label="Blog pages">
+      {page > 1 ? <a href={pageHref(page - 1)} rel="prev">← Newer</a> : <span class="off">← Newer</span>}
+      <span class="nums">
+        {pageNumbers.map((n) =>
+          n === page ? (
+            <span class="cur" aria-current="page">{n}</span>
+          ) : (
+            <a href={pageHref(n)}>{n}</a>
+          )
+        )}
+      </span>
+      {page < totalPages ? <a href={pageHref(page + 1)} rel="next">Older →</a> : <span class="off">Older →</span>}
+    </nav>
+  )}
+</section>
+
+<style>
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chips .tag { font-size: 13px; }
+  .list { padding-top: 8px; }
+  .entry {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+  }
+  .entry b { font-weight: 600; font-size: 19px; line-height: 1.35; }
+  .entry .desc {
+    color: var(--mut);
+    font-size: 15px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .entry .meta { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 13px; color: var(--mut); }
+  .pager { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; font-size: 15px; }
+  .pager a, .pager .off, .pager .cur {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    min-height: 40px;
+    padding: 0 12px;
+    border-radius: 999px;
+    text-decoration: none;
+  }
+  .pager a { border: 1px solid var(--line); }
+  .pager .off { color: var(--mut); opacity: 0.45; }
+  .pager .nums { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+  .pager .cur { background: var(--on); color: var(--on-tx); font-weight: 600; }
+</style>
