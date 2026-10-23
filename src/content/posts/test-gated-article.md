@@ -1,5 +1,6 @@
 ﻿---
 title: "How to Avoid Disqualification After Doing Everything Right"
+noindex: true
 description: "Even if you follow all the guides, airdrops can still disqualify your wallet. Learn the hidden pitfalls, red flags, and strategies to stay eligible while farming efficiently."
 date: 2026-1-4
 updatedDate: 2026-1-4

@@ -1,6 +1,6 @@
 ﻿{
   "site": {
-    "title": "Txchyon OS",
+    "title": "Txchyon",
     "base_url": "https://txchyon.com",
     "base_path": "/",
     "trailing_slash": false,
@@ -8,7 +8,7 @@
     "logo": false,
     "logo_width": "200",
     "logo_height": "34",
-    "logo_text": "Txchyon OS"
+    "logo_text": "Txchyon"
   },
   "settings": {
     "pagination": 6
@@ -16,7 +16,7 @@
   "metadata": {
     "meta_author": "GalaxyBuilt",
     "meta_image": "https://txchyon.com/images/og-txchyon.png",
-    "meta_description": "Txchyon OS: Open-Source DeFi Infrastructure. Institutional research terminals, systematic alpha, marketing services & the Genesis BTC platform."
+    "meta_description": "A small lab that researches crypto trading strategies and builds the software to test them. Nothing here is for sale."
   },
   "google_tag_manager": {
     "enable": false,
@@ -47,7 +47,7 @@
     "twitter": "https://x.com/galaxybuilt"
   },
   "branding": {
-    "blog_name": "Txchyon OS",
+    "blog_name": "Txchyon",
     "tagline": "Open-Source Institutional Infrastructure. Open-Source Intelligence.",
     "twitter_handle": "@txchyon"
   }

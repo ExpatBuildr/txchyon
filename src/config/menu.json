@@ -1,21 +1,8 @@
 {
   "main": [
     {
-      "name": "Terminals",
-      "dropdown": [
-        {
-          "name": "Project Omega (SOL)",
-          "url": "/omega"
-        },
-        {
-          "name": "Project Ultima (Intel)",
-          "url": "/ultima"
-        },
-        {
-          "name": "Project Genesis (BTC)",
-          "url": "https://txchyon.com/labs/genesis/login"
-        }
-      ]
+      "name": "Home",
+      "url": "/"
     },
     {
       "name": "Knowledge",
@@ -41,10 +28,6 @@
           "url": "/categories/alpha-insider"
         },
         {
-          "name": "Web3 Gaming",
-          "url": "/categories/web3-gaming-metaverse"
-        },
-        {
           "name": "View Pillars",
           "url": "/categories"
         },
@@ -55,22 +38,14 @@
       ]
     },
     {
-      "name": "Growth",
-      "url": "/services"
-    },
-    {
-      "name": "Shop",
-      "url": "/shop"
+      "name": "Tools",
+      "url": "/tools"
     }
   ],
   "footer": [
     {
       "name": "Txchyon",
       "url": "/"
-    },
-    {
-      "name": "Services",
-      "url": "/services"
     },
     {
       "name": "Tools",

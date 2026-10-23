@@ -1,43 +1,13 @@
 ---
 import { CATEGORY_HIERARCHY } from '@/lib/categories';
 import config from '@/config/config.json';
-import { getCollection } from 'astro:content';
-
-// Get all posts to count - with error handling
-let allPosts = [];
-let publishedPosts = [];
-let totalPosts = 0;
-let draftCount = 0;
-
-try {
-  allPosts = await getCollection('posts');
-  publishedPosts = allPosts.filter(post => !post.data.draft);
-  totalPosts = allPosts.length;
-  draftCount = totalPosts - publishedPosts.length;
-} catch (error) {
-  console.log('Error loading posts for footer counter:', error);
-  // Set default values
-  totalPosts = 0;
-  draftCount = 0;
-}
-
 // Define your footer links in a clean structure
 const footerLinks = {
-  ecosystem: {
-    title: 'Ecosystem',
+  explore: {
+    title: 'Explore',
     links: [
-      { name: 'Txchyon Capital', url: '/capital' },
-      { name: 'Txchyon Labs', url: '/labs' },
-      { name: 'Txchyon Shop', url: '/shop' },
-      { name: 'Defi Guides', url: '/blog' },
-    ]
-  },
-  services: {
-    title: 'Services',
-    links: [
-      { name: 'Launch Services', url: '/services' },
-      { name: 'Apply Now', url: '/services#apply' },
-      { name: 'Twitter Marketing', url: '/services' },
+      { name: 'Home', url: '/' },
+      { name: 'Blog', url: '/blog' },
     ]
   },
   resources: {
@@ -60,7 +30,7 @@ const isHomePage = Astro.url.pathname === '/' || Astro.url.pathname === '/index.
   <div class="container mx-auto px-4">
     
     {/* Main Footer Content */}
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
       
       {/* Brand Column - Takes 1 column */}
       <div>
@@ -77,36 +47,6 @@ const isHomePage = Astro.url.pathname === '/' || Astro.url.pathname === '/index.
         <p class="dark:text-gray-400 text-gray-600 text-sm mb-6">
           Premium DeFi education that should cost thousands... but we're giving it away free.
         </p>
-        
-        {/* Guide Counts */}
-        <div class="mb-6 space-y-2">
-          {/* Published Guides */}
-          <p class="dark:text-gray-300 text-gray-700 text-sm">
-            <span class="inline-flex items-center gap-1">
-              <svg class="w-4 h-4 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.968 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/>
-              </svg>
-              <span class="font-semibold text-green-600 dark:text-green-400">{publishedPosts.length || 0}</span> 
-              <span>Published Guides</span>
-            </span>
-          </p>
-
-          {/* Total Guides */}
-          <p class="dark:text-gray-400 text-gray-600 text-xs">
-            <span class="inline-flex items-center gap-1">
-              <svg class="w-3 h-3 text-blue-500 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-              </svg>
-              <span class="font-semibold text-blue-600 dark:text-blue-400">{totalPosts}</span> 
-              <span>Total Guides</span>
-              {draftCount > 0 && (
-                <span class="text-yellow-600 dark:text-yellow-400 ml-1">
-                  ({draftCount} draft)
-                </span>
-              )}
-            </span>
-          </p>
-        </div>
         
         {/* Social Icons - This replaces the Connect section */}
         <div class="flex gap-4 mb-4">
@@ -165,9 +105,6 @@ const isHomePage = Astro.url.pathname === '/' || Astro.url.pathname === '/index.
              class="text-blue-600 dark:text-blue-400 hover:underline">
             CC BY 4.0
           </a>.
-        </p>
-        <p class="dark:text-gray-600 text-gray-600 text-[10px] mt-1 tracking-wider uppercase font-medium">
-          Powered by <a href="https://everrank.app" target="_blank" rel="noopener noreferrer" class="hover:text-blue-500 dark:hover:text-blue-400 transition-colors">EverRank</a>, and created by <a href="https://galaxybuilt.dev" target="_blank" rel="noopener noreferrer" class="hover:text-blue-500 dark:hover:text-blue-400 transition-colors">GalaxyBuilt</a>
         </p>
       </div>
       
