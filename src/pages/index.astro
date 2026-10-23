@@ -30,6 +30,14 @@ const notes = [
   { date: "Oct 2026", text: "Now calibrating the setup detector against real trades I marked by hand, before changing any rules." },
   { date: "Next", text: "Several weeks of paper trading on live prices. Results get posted here, wins and losses alike." },
 ];
+const socials = [
+  { name: "GitHub", href: "https://github.com/ExpatBuildr", header: true,
+    d: "M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" },
+  { name: "X", href: "https://x.com/txchyon", header: true,
+    d: "M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" },
+  { name: "YouTube", href: "https://www.youtube.com/@Txchyon", header: false,
+    d: "M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" },
+];
 const title = "Txchyon — a small crypto trading research lab";
 const description = "A small lab that researches crypto trading strategies and builds the software to test them. Nothing here is for sale.";
 ---
@@ -155,6 +163,11 @@ const description = "A small lab that researches crypto trading strategies and b
       [hidden] { display: none !important; }
       footer { padding: 32px 0 48px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: 14px; color: var(--mut); }
       footer .legal { max-width: 520px; }
+      footer .foot-left { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+      .icons { display: flex; align-items: center; gap: 4px; }
+      .icons a { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 999px; color: var(--mut); }
+      .icons svg { width: 20px; height: 20px; fill: currentColor; }
+      footer .icons { margin-left: -10px; }
       @media (max-width: 520px) { #top { padding: 56px 0 40px; } }
     </style>
   </head>
@@ -168,7 +181,14 @@ const description = "A small lab that researches crypto trading strategies and b
         <nav aria-label="Main">
           <a href="#software">Software</a>
           <a href="#notes">Lab notes</a>
-          <a href="#blog">Blog</a>
+          <a href="/blog">Blog</a>
+          <span class="icons">
+            {socials.filter((s) => s.header).map((s) => (
+              <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.name} title={s.name}>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d={s.d} /></svg>
+              </a>
+            ))}
+          </span>
           <button type="button" class="theme-btn" id="themeBtn" aria-label="Switch light or dark mode">Light mode</button>
         </nav>
       </header>
@@ -201,6 +221,7 @@ const description = "A small lab that researches crypto trading strategies and b
         <p class="small">Screens show sample data.</p>
         <ul class="bullets">
           <li><span>Bot:</span> buys support bounces and trend pullbacks on SOL, ETH and BTC, with a stop on every trade.</li>
+          <li><span>Exchange:</span> built around <a href="https://www.asterdex.com" target="_blank" rel="noopener noreferrer">Aster (asterdex.com)</a>. It reads real Aster prices and fees and trades on paper only; live trading is switched off.</li>
           <li><span>Learning tools:</span> Teach mode compares your calls with the bot's rules; Mark my trades checks whether the bot would have found your own trades. An AI analyst is planned.</li>
           <li><span>Alerts:</span> phone alerts the moment a setup appears, loud enough to wake you.</li>
         </ul>
@@ -238,7 +259,17 @@ const description = "A small lab that researches crypto trading strategies and b
       </section>
 
       <footer>
-        <span>© 2026 Txchyon</span>
+        <div class="foot-left">
+          <span>© 2026 Txchyon</span>
+          <div class="icons">
+            {socials.map((s) => (
+              <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.name} title={s.name}>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d={s.d} /></svg>
+              </a>
+            ))}
+          </div>
+          <span>Built by <a href="https://x.com/expatbuilder" target="_blank" rel="noopener noreferrer">ExpatBuildr</a></span>
+        </div>
         <span class="legal">
           Research and software only. Not investment advice. Nothing on this site is for sale, and we don't give signals or manage money. Some
           older articles contain affiliate links; see the <a href="/disclaimer">disclaimer</a>.
