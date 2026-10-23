@@ -1,0 +1,44 @@
+---
+import { getCollection } from "astro:content";
+import Base from "@/layouts/Base.astro";
+import Pagination from "@/layouts/components/Pagination.astro";
+import Posts from "@/layouts/components/Posts.astro"; // CHANGED: Use Posts instead of PostCard
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+  const postsPerPage = 7;
+  const totalPages = Math.ceil(allPosts.length / postsPerPage);
+
+  const paths = [];
+  for (let page = 2; page <= totalPages; page++) {
+    paths.push({
+      params: { slug: page.toString() },
+      props: { page },
+    });
+  }
+  return paths;
+}
+
+const { page = 1 } = Astro.props;
+
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+const sortedPosts = allPosts.sort((a, b) => 
+  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+
+const postsPerPage = 7;
+const start = (Number(page) - 1) * postsPerPage;
+const currentPosts = sortedPosts.slice(start, start + postsPerPage);
+const totalPages = Math.ceil(sortedPosts.length / postsPerPage);
+---
+
+<Base title={`Blog Page ${page}`}>
+  <section class="section">
+    <div class="container">
+      <!-- CHANGED: Use Posts component instead of inline HTML -->
+      <Posts posts={currentPosts} className="mb-16" />
+      
+      <Pagination totalPages={totalPages} currentPage={Number(page)} />
+    </div>
+  </section>
+</Base>

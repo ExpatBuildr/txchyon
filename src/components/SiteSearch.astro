@@ -1,0 +1,70 @@
+---
+// Client-side article search used by /search and /search-results. Searches title, description, tags and category.
+import { getCollection } from "astro:content";
+import { CATEGORY_HIERARCHY } from "@/lib/categories";
+
+const posts = await getCollection("posts", ({ data }) => !data.draft);
+const index = posts
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .map((p) => ({
+    t: p.data.title as string,
+    d: (p.data.description ?? "") as string,
+    u: `/blog/${p.slug}`,
+    c: ((CATEGORY_HIERARCHY as any)[p.data.category]?.name ?? p.data.category) as string,
+    k: (p.data.tags ?? []).join(" ") as string,
+  }));
+---
+
+<div class="search">
+  <label class="small" for="q">Search {index.length} articles</label>
+  <input class="input" id="q" type="search" placeholder="Try &quot;airdrop&quot;, &quot;ledger&quot; or &quot;tax&quot;" autocomplete="off" />
+  <p class="small" id="status" aria-live="polite"></p>
+  <div id="results"></div>
+</div>
+
+<script type="application/json" id="search-index" set:html={JSON.stringify(index)} />
+
+<script>
+  type Item = { t: string; d: string; u: string; c: string; k: string };
+  const items: Item[] = JSON.parse(document.getElementById("search-index")!.textContent || "[]");
+  const input = document.getElementById("q") as HTMLInputElement;
+  const results = document.getElementById("results")!;
+  const status = document.getElementById("status")!;
+
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
+
+  function render() {
+    const q = input.value.trim().toLowerCase();
+    if (q.length < 2) {
+      results.innerHTML = "";
+      status.textContent = q.length ? "Type at least 2 characters." : "";
+      return;
+    }
+    const words = q.split(/\s+/);
+    const hits = items
+      .map((i) => {
+        const hay = `${i.t} ${i.d} ${i.c} ${i.k}`.toLowerCase();
+        if (!words.every((w) => hay.includes(w))) return null;
+        return { i, score: words.reduce((s, w) => s + (i.t.toLowerCase().includes(w) ? 3 : 0) + (i.k.toLowerCase().includes(w) ? 1 : 0), 0) };
+      })
+      .filter(Boolean)
+      .sort((a, b) => b!.score - a!.score)
+      .slice(0, 40) as { i: Item; score: number }[];
+    status.textContent = hits.length ? `${hits.length}${hits.length === 40 ? "+" : ""} results` : "No results. Try other words.";
+    results.innerHTML = hits
+      .map(
+        ({ i }) =>
+          `<a class="entry" href="${i.u}"><b>${esc(i.t)}</b><span class="desc">${esc(i.d)}</span><span class="meta">${esc(i.c)}</span></a>`
+      )
+      .join("");
+  }
+
+  const initial = new URLSearchParams(location.search).get("q");
+  if (initial) input.value = initial;
+  input.addEventListener("input", render);
+  render();
+</script>
+
+<style>
+  .search { display: flex; flex-direction: column; gap: 10px; }
+</style>

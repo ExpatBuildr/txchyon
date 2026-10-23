@@ -1,71 +1,9 @@
 ---
-// src/pages/tools.astro
-import Base from '../layouts/Base.astro';
+// /tools. Old version: src/pages/_archive/old-design/tools.astro.txt
+// The tools array below (names, descriptions, urls, bonuses) is unchanged from the old page.
+import Lab from "@/layouts/Lab.astro";
 
-const title = "Crypto Toolkit - Every Tool I Actually Use";
-const description = "Complete list of platforms, wallets, and services I use with full transparency on referral earnings. Always updated.";
----
-
-<Base title={title} description={description}>
-  <main class="max-w-6xl mx-auto px-4 py-16">
-    <!-- Hero Section -->
-    <div class="text-center mb-12">
-      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-        🧰 Complete Crypto Toolkit
-      </h1>
-      <p class="text-xl text-gray-700 mb-6 max-w-3xl mx-auto">
-        Every single tool, exchange, and service I use for crypto trading, DeFi, and research.
-        <span class="font-semibold text-cyan-600"> Full affiliate transparency included.</span>
-      </p>
-      <div class="bg-gradient-to-r from-cyan-50 to-blue-50 border border-cyan-200 rounded-xl p-4 max-w-2xl mx-auto">
-        <p class="text-gray-800 flex items-start gap-2">
-          <span class="text-cyan-500 font-bold text-lg">⚠️</span>
-          <span>
-            Using my links <span class="font-semibold text-green-600">never costs you extra</span>.
-            You often get bonuses, and commissions support this free site.
-          </span>
-        </p>
-      </div>
-    </div>
-
-    <!-- Navigation Tabs -->
-    <div class="flex flex-wrap gap-2 mb-8 justify-center" id="category-tabs">
-      <button class="category-tab px-4 py-2 rounded-lg bg-cyan-100 text-cyan-800 font-medium" data-category="all">
-        🔥 All Tools
-      </button>
-      <button class="category-tab px-4 py-2 rounded-lg bg-gray-100 text-gray-700 font-medium" data-category="trading">
-        📈 Trading
-      </button>
-      <button class="category-tab px-4 py-2 rounded-lg bg-gray-100 text-gray-700 font-medium" data-category="wallets">
-        🔐 Wallets
-      </button>
-      <button class="category-tab px-4 py-2 rounded-lg bg-gray-100 text-gray-700 font-medium" data-category="cex">
-        🏦 CEX
-      </button>
-      <button class="category-tab px-4 py-2 rounded-lg bg-gray-100 text-gray-700 font-medium" data-category="defi">
-        🦄 DeFi
-      </button>
-      <button class="category-tab px-4 py-2 rounded-lg bg-gray-100 text-gray-700 font-medium" data-category="tools">
-        🛠️ Tools
-      </button>
-      <button class="category-tab px-4 py-2 rounded-lg bg-gray-100 text-gray-700 font-medium" data-category="services">
-        💼 Services
-      </button>
-    </div>
-
-    <!-- Search -->
-    <div class="mb-8">
-      <input 
-        type="text" 
-        placeholder="🔍 Search tools by name or category..." 
-        class="w-full max-w-md mx-auto block px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none shadow-sm"
-        id="tool-search"
-      />
-    </div>
-
-    <!-- Tools Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="tools-grid">
-      {[
+const tools = [
         // Trading & Perpetuals
         {
           name: "Axiom",
@@ -381,173 +319,99 @@ const description = "Complete list of platforms, wallets, and services I use wit
           bonus: "Free subscription",
           icon: "📧"
         }
-      ].map(tool => (
-        <div 
-          class="tool-card bg-white border border-gray-200 rounded-xl p-6 hover:shadow-xl transition-all hover:-translate-y-1"
-          data-category={tool.category}
-          data-status={tool.status}
-          data-name={tool.name.toLowerCase()}
-        >
-          <div class="flex justify-between items-start mb-4">
-            <div class="flex items-center gap-3">
-              <div class="text-2xl">{tool.icon}</div>
-              <div>
-                <h3 class="text-xl font-bold text-gray-900">
-                  {tool.name}
-                </h3>
-                <span class="text-sm text-gray-500">{tool.type}</span>
-              </div>
-            </div>
-            
-            <span class={`
-              px-3 py-1 rounded-full text-xs font-bold
-              ${tool.status === 'active' ? 'bg-green-100 text-green-800' : ''}
-              ${tool.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : ''}
-              ${tool.status === 'no-affiliate' ? 'bg-gray-100 text-gray-800' : ''}
-            `}>
-              {tool.status === 'active' ? 'ACTIVE' : 
-               tool.status === 'pending' ? 'SOON' : 
-               'NO AFFILIATE'}
-            </span>
+];
+
+const tabs = [
+  { id: "all", label: "All" },
+  { id: "trading", label: "Trading" },
+  { id: "wallets", label: "Wallets" },
+  { id: "cex", label: "Exchanges" },
+  { id: "defi", label: "DeFi" },
+  { id: "tools", label: "Tools" },
+  { id: "services", label: "Newsletter" },
+];
+---
+
+<Lab
+  title="Tools | Txchyon"
+  description="The exchanges, wallets and apps we use for crypto research and trading, with a plain note on which links are referral links."
+  canonical="/tools"
+>
+  <section class="lab-section first">
+    <h1>Tools</h1>
+    <p class="lead">The exchanges, wallets and apps we use for crypto research and trading.</p>
+    <p class="small">
+      Many links here are referral links. Using them never costs you extra, and commissions help keep this site free. This is not
+      financial advice; see the <a href="/disclaimer">disclaimer</a>.
+    </p>
+  </section>
+
+  <section class="lab-section tight">
+    <div class="chips" id="category-tabs" role="group" aria-label="Filter by category">
+      {tabs.map((t) => (
+        <button type="button" class="chipbtn" data-category={t.id} aria-pressed={t.id === "all" ? "true" : "false"}>{t.label}</button>
+      ))}
+    </div>
+    <input class="input" type="search" id="tool-search" placeholder="Search tools" aria-label="Search tools" />
+
+    <div class="grid" id="tools-grid">
+      {tools.map((tool) => (
+        <div class="card tool-card" data-category={tool.category} data-status={tool.status} data-name={tool.name.toLowerCase()}>
+          <div class="tool-top">
+            <b>{tool.name}</b>
+            <span class="chip">{tool.type}</span>
           </div>
-          
-          <p class="text-gray-600 mb-4">
-            {tool.description}
-          </p>
-          
-          <div class="flex items-center justify-between">
-            <span class="text-sm text-gray-500">
-              {tool.bonus}
-            </span>
-            {tool.url !== '#' ? (
-              <a 
-                href={tool.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center gap-1 px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-medium rounded-lg hover:shadow-lg hover:shadow-cyan-500/30 transition-all text-sm"
-              >
-                Visit →
-              </a>
+          <p class="mut tool-desc">{tool.description}</p>
+          <div class="tool-bottom">
+            <span class="small">{tool.url !== "#" ? tool.bonus : ""}</span>
+            {tool.url !== "#" ? (
+              <a class="btn ghost" href={tool.url} target="_blank" rel="noopener noreferrer">Visit</a>
             ) : (
-              <span class="text-gray-400 text-sm">Coming soon</span>
+              <span class="small">Coming soon</span>
             )}
           </div>
         </div>
       ))}
     </div>
 
-    <!-- Stats & Transparency -->
-    <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="bg-gradient-to-r from-cyan-50 to-blue-50 border border-cyan-200 rounded-xl p-6 text-center">
-        <div class="text-3xl font-bold text-cyan-700 mb-2">40+</div>
-        <div class="text-gray-700 font-medium">Total Tools Listed</div>
-      </div>
-      <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-6 text-center">
-        <div class="text-3xl font-bold text-green-700 mb-2">30+</div>
-        <div class="text-gray-700 font-medium">Active Affiliates</div>
-      </div>
-      <div class="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-xl p-6 text-center">
-        <div class="text-3xl font-bold text-purple-700 mb-2">100%</div>
-        <div class="text-gray-700 font-medium">Tools I Actually Use</div>
-      </div>
-    </div>
+    <p class="small">
+      Suggest a tool? <a href="/contact">Get in touch</a>. See also <a href="/categories/tools-automation">our tool articles</a>.
+    </p>
+  </section>
+</Lab>
 
-    <!-- CTA -->
-    <div class="text-center mt-12">
-      <p class="text-gray-600 mb-8 max-w-2xl mx-auto">
-        Want me to add or review a specific tool? 
-        <a href="/contact" class="text-cyan-600 font-medium hover:underline">Send a suggestion</a>.
-      </p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a 
-          href="/blog" 
-          class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-cyan-500/30 transition-all"
-        >
-          📚 Read My Tool Guides
-        </a>
-        <a 
-          href="/categories/tools-automation" 
-          class="inline-flex items-center gap-2 px-6 py-3 bg-gray-800 hover:bg-gray-900 text-white font-bold rounded-xl transition-all"
-        >
-          🛠️ More Tool Articles
-        </a>
-      </div>
-    </div>
+<style>
+  .chipbtn { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 13px; color: var(--mut); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; min-height: 36px; }
+  .chipbtn[aria-pressed="true"] { background: var(--on); color: var(--on-tx); border-color: var(--on); }
+  .tool-card { display: flex; flex-direction: column; gap: 10px; }
+  .tool-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .tool-top b { font-size: 18px; font-weight: 600; }
+  .tool-desc { font-size: 15px; flex: 1; }
+  .tool-bottom { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .tool-bottom .btn { min-height: 36px; padding: 0 16px; font-size: 14px; }
+</style>
 
-    <!-- Footer Note -->
-    <div class="text-center mt-12 pt-8 border-t border-gray-200">
-      <p class="text-sm text-gray-500">
-        Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} • 
-        <a href="/disclaimer" class="text-gray-600 hover:underline ml-2">Not financial advice</a> • 
-        Always DYOR • Commissions support this free site
-      </p>
-    </div>
-  </main>
+<script>
+  const tabs = document.querySelectorAll<HTMLButtonElement>(".chipbtn");
+  const cards = document.querySelectorAll<HTMLElement>(".tool-card");
+  const search = document.getElementById("tool-search") as HTMLInputElement | null;
+  let category = "all";
 
-  <style>
-    /* Active tab styling */
-    .category-tab.active {
-      background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
-      color: white;
-    }
-    
-    /* Tool card animations */
-    .tool-card {
-      transition: all 0.3s ease;
-    }
-    
-    .tool-card:hover {
-      border-color: #06b6d4;
-    }
-  </style>
-
-  <script>
-    // Category filtering
-    document.querySelectorAll('.category-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        // Update active tab
-        document.querySelectorAll('.category-tab').forEach(t => {
-          t.classList.remove('active');
-          t.classList.add('bg-gray-100', 'text-gray-700');
-          t.classList.remove('bg-cyan-100', 'text-cyan-800');
-        });
-        
-        tab.classList.add('active');
-        tab.classList.remove('bg-gray-100', 'text-gray-700');
-        tab.classList.add('bg-cyan-100', 'text-cyan-800');
-        
-        // Filter tools
-        const category = tab.dataset.category;
-        document.querySelectorAll('.tool-card').forEach(card => {
-          if (category === 'all' || card.dataset.category === category) {
-            card.style.display = 'block';
-          } else {
-            card.style.display = 'none';
-          }
-        });
-      });
+  function apply() {
+    const q = (search?.value ?? "").toLowerCase();
+    cards.forEach((card) => {
+      const okCat = category === "all" || card.dataset.category === category;
+      const okText = !q || (card.textContent ?? "").toLowerCase().includes(q);
+      card.style.display = okCat && okText ? "" : "none";
     });
+  }
 
-    // Search functionality
-    const searchInput = document.getElementById('tool-search');
-    if (searchInput) {
-      searchInput.addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        document.querySelectorAll('.tool-card').forEach(card => {
-          const name = card.dataset.name;
-          const categories = card.dataset.category;
-          const text = card.textContent.toLowerCase();
-          
-          if (name.includes(searchTerm) || text.includes(searchTerm)) {
-            card.style.display = 'block';
-          } else {
-            card.style.display = 'none';
-          }
-        });
-      });
-    }
-
-    // Initialize first tab as active
-    document.querySelector('[data-category="all"]').click();
-  </script>
-</Base>
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      category = tab.dataset.category ?? "all";
+      tabs.forEach((t) => t.setAttribute("aria-pressed", t === tab ? "true" : "false"));
+      apply();
+    });
+  });
+  search?.addEventListener("input", apply);
+</script>

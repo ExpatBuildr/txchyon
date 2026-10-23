@@ -1,0 +1,426 @@
+---
+// src/pages/categories/index.astro
+import { getCollection } from 'astro:content';
+import Base from "@/layouts/Base.astro";
+import { CATEGORY_HIERARCHY } from '@/lib/categories';
+
+// Helper function to calculate read time
+function calculateReadTime(content, wordsPerMinute = 130) {
+  if (!content) return 10;
+  
+  const plainText = content
+    .replace(/---[\s\S]*?---/, '')
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/<[^>]*>/g, '')
+    .replace(/#{1,6}\s*/g, '')
+    .replace(/[\[\]\(\)]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  
+  const wordCount = plainText.split(/\s+/).length;
+  const minutes = Math.ceil(wordCount / wordsPerMinute);
+  
+  return Math.max(1, Math.min(minutes, 60));
+}
+
+function getPostReadTime(post) {
+  if (post.data.readTime) return post.data.readTime;
+  if (post.body) return calculateReadTime(post.body);
+  
+  const estimates = {
+    'getting-started': 8,
+    'security-privacy': 10,
+    'trading-investing': 12,
+    'defi-yield': 15,
+    'airdrop-farming': 12,
+    'infrastructure-tech': 14,
+    'tools-automation': 13,
+    'research-analysis': 15,
+    'regulatory-tax': 12,
+    'portfolio-management': 12,
+    'prediction-markets': 14
+  };
+  
+  return estimates[post.data.category] || 10;
+}
+
+// Get all posts
+const allPostsRaw = await getCollection('posts', ({ data }) => !data.draft);
+const allPosts = allPostsRaw.map(post => ({
+  ...post,
+  data: {
+    ...post.data,
+    readTime: getPostReadTime(post)
+  }
+}));
+
+// Calculate post counts per category
+const categoryPostCounts = {};
+const latestCategoryPosts = {};
+
+Object.keys(CATEGORY_HIERARCHY).forEach(category => {
+  const postsInCategory = allPosts.filter(p => p.data.category === category);
+  categoryPostCounts[category] = postsInCategory.length;
+  latestCategoryPosts[category] = postsInCategory
+    .sort((a, b) => new Date(b.data.date) - new Date(a.data.date))
+    .slice(0, 2);
+});
+
+// Calculate total stats
+const totalPosts = allPosts.length;
+const totalCategories = Object.keys(CATEGORY_HIERARCHY).length;
+
+// Get featured categories (most posts)
+const featuredCategories = Object.keys(CATEGORY_HIERARCHY)
+  .map(category => ({
+    slug: category,
+    ...CATEGORY_HIERARCHY[category],
+    postCount: categoryPostCounts[category] || 0,
+    latestPosts: latestCategoryPosts[category] || []
+  }))
+  .sort((a, b) => b.postCount - a.postCount)
+  .slice(0, 4);
+
+// Prepare category data with progress
+const categoriesWithProgress = Object.entries(CATEGORY_HIERARCHY).map(([slug, category]) => {
+  const postCount = categoryPostCounts[slug] || 0;
+  const latestPosts = latestCategoryPosts[slug] || [];
+  const isGettingStarted = slug === 'getting-started';
+  
+  // Determine if this is an exclusive category and which type
+  const isExclusive = slug === 'web3-gaming-metaverse' || slug === 'alpha-insider-strategies';
+  const isAlphaCategory = slug === 'alpha-insider-strategies';
+  const isGamingCategory = slug === 'web3-gaming-metaverse';
+  
+  // Determine category status
+  let categoryStatus = 'New path';
+  if (postCount > 0 && postCount <= 3) categoryStatus = 'Getting started';
+  else if (postCount > 3 && postCount <= 7) categoryStatus = 'Growing';
+  else if (postCount > 7) categoryStatus = 'Comprehensive';
+  
+  // Calculate progress
+  const progressWidth = Math.min(100, (postCount / 10) * 100);
+  
+  return {
+    slug,
+    ...category,
+    postCount,
+    latestPosts,
+    isGettingStarted,
+    isExclusive,
+    isAlphaCategory,
+    isGamingCategory,
+    categoryStatus,
+    progressWidth
+  };
+});
+---
+
+<Base title="Master DeFi Through Our 11 Pillar Categories | Txchyon" 
+      description="Explore our comprehensive DeFi learning paths across 11 essential categories. From beginner guides to advanced strategies, all content is completely free.">
+  
+  <!-- 🧬 OS_INFRASTRUCTURE: INDUSTRIAL HERO -->
+  <section class="relative min-h-[60vh] flex items-center justify-center overflow-hidden dark:bg-[#050505] bg-white border-b border-gray-100 dark:border-white/5 font-mono">
+    <!-- Tier 3: Dot Grid + Protocol Glows -->
+    <div class="absolute inset-0 pointer-events-none z-0" style="background-image: radial-gradient(circle, #9333ea 1px, transparent 1px); background-size: 32px 32px; opacity: 0.05;"></div>
+    <div class="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-600/20 blur-[120px] rounded-full"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-cyan-600/20 blur-[120px] rounded-full"></div>
+    </div>
+
+    <div class="container mx-auto px-4 relative z-10 py-24">
+      <div class="max-w-5xl mx-auto">
+        <div class="flex flex-col items-center text-center">
+            <!-- OS Status Badge -->
+            <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-gray-50/50 dark:bg-white/5 border border-gray-200 dark:border-white/10 backdrop-blur-md mb-8 animate-fade-in">
+              <div class="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse"></div>
+              <span class="text-[10px] font-black text-gray-500 dark:text-cyan-500 uppercase tracking-[0.3em] italic">Protocol_Repository_Access</span>
+            </div>
+
+            <h1 class="text-5xl md:text-8xl font-black mb-8 tracking-tighter uppercase italic leading-[0.85] dark:text-white text-gray-900">
+              The <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-cyan-500 to-green-400">Pillar</span><br/>Index<span class="blinking-cursor">_</span>
+            </h1>
+
+            <div class="h-1.5 w-32 bg-gradient-to-r from-purple-500 to-cyan-500 mb-8"></div>
+
+            <p class="text-sm md:text-base font-bold text-gray-500 dark:text-gray-400 tracking-[0.1em] uppercase max-w-2xl leading-relaxed">
+                Structured intelligence fragments mapped across {totalCategories} operational pillars. 
+                Full access to {totalPosts} validated guides for systemic growth.
+            </p>
+
+            <!-- Metadata Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 w-full max-w-4xl">
+              <div class="p-6 rounded-[2rem] bg-gray-50/50 dark:bg-white/5 border border-gray-100 dark:border-white/10 backdrop-blur-md">
+                <div class="text-[10px] text-gray-400 uppercase tracking-widest mb-1">Architecture</div>
+                <div class="text-2xl font-black text-purple-500">{totalCategories} Pillars</div>
+              </div>
+              <div class="p-6 rounded-[2rem] bg-gray-50/50 dark:bg-white/5 border border-gray-100 dark:border-white/10 backdrop-blur-md">
+                <div class="text-[10px] text-gray-400 uppercase tracking-widest mb-1">Database</div>
+                <div class="text-2xl font-black text-cyan-500">{totalPosts} Guides</div>
+              </div>
+              <div class="p-6 rounded-[2rem] bg-gray-50/50 dark:bg-white/5 border border-gray-100 dark:border-white/10 backdrop-blur-md">
+                <div class="text-[10px] text-gray-400 uppercase tracking-widest mb-1">Fee_Status</div>
+                <div class="text-2xl font-black text-green-400">0 SOL_</div>
+              </div>
+              <div class="p-6 rounded-[2rem] bg-gray-50/50 dark:bg-white/5 border border-gray-100 dark:border-white/10 backdrop-blur-md">
+                <div class="text-[10px] text-gray-400 uppercase tracking-widest mb-1">Tier_Access</div>
+                <div class="text-2xl font-black text-white italic">OPEN</div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🦾 CORE MODULES: FEATURED PATHS -->
+  <section id="featured-paths" class="py-32 dark:bg-black bg-white selection:bg-cyan-500 selection:text-black font-mono relative overflow-hidden">
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
+        <div>
+          <h2 class="text-4xl md:text-6xl font-black mb-6 tracking-tighter uppercase italic leading-[0.85] dark:text-white text-gray-900">
+            Critical <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-500">Pathways</span>_
+          </h2>
+          <p class="text-[10px] font-bold text-gray-500 dark:text-gray-400 tracking-[0.4em] uppercase">High-Priority Learning Vectors</p>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+        {featuredCategories.map((category) => (
+          <div class="group relative overflow-hidden bg-gray-50/50 dark:bg-[#080808] border border-gray-100 dark:border-white/10 p-8 hover:dark:border-cyan-500/50 transition-all cursor-pointer rounded-[2.5rem] shadow-xl dark:shadow-cyan-500/5 backdrop-blur-md hover:-translate-y-2">
+            <div class="absolute top-0 right-0 p-6 opacity-20 text-[8px] dark:text-white text-gray-900 font-black italic">PROTOCOL_VECT_{category.slug.toUpperCase().slice(0,3)}</div>
+            
+            <div class="text-4xl mb-6">{category.icon}</div>
+            
+            <h3 class="text-2xl font-black text-gray-900 dark:text-white uppercase italic tracking-tighter mb-4 group-hover:text-cyan-500 transition-colors">
+              {category.name}
+            </h3>
+            
+            <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-8 uppercase font-bold">
+              {category.description}
+            </p>
+
+            <div class="space-y-2 mb-8">
+              {category.latestPosts.map(post => (
+                <a href={`/blog/${post.slug}`} class="block p-3 rounded-xl bg-black/5 dark:bg-white/5 border border-transparent hover:border-cyan-500/30 transition-all group/post">
+                  <div class="text-[10px] font-black dark:text-gray-300 text-gray-700 uppercase group-hover/post:text-cyan-500 transition-colors line-clamp-1">{post.data.title}_</div>
+                </a>
+              ))}
+            </div>
+            
+            <a href={`/categories/${category.slug}`} class="inline-flex items-center gap-2 text-[10px] font-black text-cyan-500 uppercase tracking-widest group-hover:gap-4 transition-all italic">
+              Access_Full_Path <span class="animate-pulse">→</span>
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 🕹️ EXECUTION_HUB: ALL PILLARS -->
+  <section id="all-pillars" class="py-32 dark:bg-[#050505] bg-gray-50 font-mono relative border-y border-gray-100 dark:border-white/5">
+    <!-- Grid Overlay -->
+    <div class="absolute inset-0 opacity-[0.03] dark:opacity-[0.07] pointer-events-none" style="background-image: radial-gradient(#9333ea 1px, transparent 1px); background-size: 32px 32px;"></div>
+
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="text-center mb-24">
+        <h2 class="text-5xl md:text-7xl font-black mb-8 tracking-tighter uppercase italic leading-[0.85] dark:text-white text-gray-900">
+          The <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-cyan-500">Repository</span> Matrix_
+        </h2>
+        <div class="h-1.5 w-32 bg-gradient-to-r from-green-400 to-cyan-500 mx-auto mb-6"></div>
+        <p class="text-[10px] font-bold text-gray-500 dark:text-gray-400 tracking-[0.4em] uppercase">Comprehensive Access to all Protocol Modules</p>
+      </div>
+      
+      <!-- 🚀 RECOMMENDED STARTING POINT (Large Scale) -->
+      {categoriesWithProgress.filter(cat => cat.isGettingStarted).map(category => (
+        <div class="mb-20 max-w-7xl mx-auto">
+          <div class="group relative overflow-hidden bg-white/80 dark:bg-[#080808] border-2 border-emerald-500/40 p-10 md:p-16 rounded-[3rem] shadow-2xl dark:shadow-emerald-500/10 backdrop-blur-xl">
+            <!-- Tier 1: Animated Gradient Border -->
+            <div class="absolute inset-0 rounded-[3rem] p-[2px] opacity-20 group-hover:opacity-100 transition-opacity duration-500">
+              <div class="absolute inset-0 rounded-[3rem] bg-gradient-to-r from-emerald-500 via-cyan-500 to-green-500 animate-spin-slow opacity-10"></div>
+            </div>
+
+            <div class="relative z-10 flex flex-col lg:flex-row gap-12 items-center">
+              <div class="lg:w-2/3">
+                <div class="flex items-center gap-6 mb-8">
+                  <span class="text-6xl md:text-8xl p-6 bg-emerald-500/10 rounded-[2rem] border border-emerald-500/20">{category.icon}</span>
+                  <div>
+                    <div class="text-[10px] font-black text-emerald-500 uppercase tracking-[0.4em] mb-2 italic">Priority_Sequence_001</div>
+                    <h3 class="text-4xl md:text-6xl font-black dark:text-white text-gray-900 uppercase italic tracking-tighter leading-none">
+                      {category.name}
+                    </h3>
+                  </div>
+                </div>
+
+                <p class="text-sm md:text-lg font-bold text-gray-500 dark:text-gray-400 uppercase leading-relaxed mb-10 max-w-2xl">
+                  {category.description}
+                </p>
+
+                <!-- Progress Terminal -->
+                <div class="mb-12 max-w-xl">
+                  <div class="flex justify-between items-center mb-4">
+                    <div class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Initialization_Status</div>
+                    <div class="text-[10px] font-black text-emerald-500 uppercase tracking-widest italic animate-pulse">{category.categoryStatus}</div>
+                  </div>
+                  <div class="h-3 bg-gray-100 dark:bg-white/5 rounded-full overflow-hidden border border-gray-100 dark:border-white/10 padding-[2px]">
+                    <div class="h-full bg-gradient-to-r from-emerald-500 to-green-400 rounded-full transition-all duration-1000 shadow-[0_0_15px_rgba(16,185,129,0.5)]" style={{"width": `${category.progressWidth}%`}}></div>
+                  </div>
+                  <div class="mt-4 flex justify-between text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                    <span>{category.postCount} Validated_Guides</span>
+                    <span>{Math.round(category.progressWidth)}% Sync</span>
+                  </div>
+                </div>
+
+                <a href={`/categories/${category.slug}`} class="group/btn relative inline-flex items-center gap-4 px-10 py-5 bg-gradient-to-r from-emerald-600 to-green-600 text-white font-black uppercase text-xs tracking-[0.2em] rounded-2xl italic transition-all hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/40">
+                  <span class="relative z-10">Initialize_Journey_🚀</span>
+                  <div class="absolute inset-0 rounded-2xl bg-emerald-500 blur-xl opacity-0 group-hover/btn:opacity-40 transition-opacity"></div>
+                </a>
+              </div>
+
+              <div class="lg:w-1/3 w-full">
+                <div class="p-8 rounded-[2rem] bg-gray-50/50 dark:bg-black/40 border border-gray-100 dark:border-white/10 backdrop-blur-md">
+                   <div class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-6 border-b border-gray-100 dark:border-white/5 pb-4 italic">Recent_Activity_Log</div>
+                   <div class="space-y-3">
+                      {category.latestPosts.map(post => (
+                        <a href={`/blog/${post.slug}`} class="block p-4 rounded-xl bg-white dark:bg-white/5 border border-gray-100 dark:border-white/5 hover:border-emerald-500/30 transition-all group/item">
+                          <div class="text-[11px] font-black dark:text-gray-200 text-gray-800 uppercase italic mb-2 line-clamp-1 group-hover/item:text-emerald-500 transition-colors">{post.data.title}_</div>
+                          <div class="flex justify-between text-[8px] font-black text-gray-400 uppercase tracking-widest">
+                            <span>{post.data.readTime} MIN_READ</span>
+                            <span>{new Date(post.data.date).toLocaleDateString()}</span>
+                          </div>
+                        </a>
+                      ))}
+                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+
+      <!-- 🔳 GRID MATRIX: ALL PILLARS -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+        {categoriesWithProgress.filter(cat => !cat.isGettingStarted).map((category) => (
+          <div class={`group relative overflow-hidden p-10 transition-all duration-300 rounded-[2.5rem] border backdrop-blur-md hover:-translate-y-2 flex flex-col items-start min-h-[500px]
+            ${category.isExclusive ? (
+              category.isAlphaCategory 
+                ? 'bg-yellow-50/30 dark:bg-yellow-900/10 border-yellow-500/60 hover:border-yellow-400 shadow-[0_0_40px_rgba(234,179,8,0.1)] dark:shadow-[0_0_40px_rgba(234,179,8,0.05)]' 
+                : 'bg-purple-50/20 dark:bg-purple-950/20 border-purple-500/40 hover:border-purple-500 shadow-[0_0_40px_rgba(168,85,247,0.1)]'
+            ) : 'bg-gray-50/50 dark:bg-[#080808] border-gray-100 dark:border-white/10 hover:border-cyan-500/50'}`}>
+            
+            <!-- Tier 1: OS Header Metadata -->
+            <div class={`absolute top-0 right-0 p-8 text-[9px] font-black uppercase tracking-widest italic opacity-20 group-hover:opacity-100 transition-opacity
+              ${category.isExclusive ? (category.isAlphaCategory ? 'text-yellow-500' : 'text-purple-500') : 'text-cyan-500'}`}>
+              {category.isExclusive ? 'MOD_EXT_LOCK_v2.0' : `MOD_VECT_${category.slug.toUpperCase().slice(0,4)}`}
+            </div>
+
+            {category.isExclusive && (
+              <div class="absolute top-0 left-0 p-6 z-10 w-full">
+                <div class={`w-fit px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest italic shadow-lg flex items-center gap-2 animate-pulse
+                  ${category.isAlphaCategory ? 'bg-gradient-to-r from-yellow-500 via-yellow-400 to-orange-600 text-black font-extrabold' : 'bg-gradient-to-r from-purple-600 via-pink-600 to-purple-800 text-white'}`}>
+                  <span class="text-xs">{category.isAlphaCategory ? '⚡' : '🎮'}</span>
+                  <span>{category.isAlphaCategory ? 'ALPHA_SUBSCRIPTION_GATED' : 'NEWSLETTER_SPECIAL_ACCESS'}</span>
+                </div>
+              </div>
+            )}
+
+            <!-- Visual Emphasis for Exclusive Pillars -->
+            {category.isExclusive && (
+              <div class={`absolute -bottom-20 -right-20 w-64 h-64 blur-[100px] opacity-30 group-hover:opacity-50 transition-opacity
+                ${category.isAlphaCategory ? 'bg-yellow-400' : 'bg-purple-500'}`}></div>
+              <div class={`absolute -top-10 -left-10 w-40 h-40 blur-[80px] opacity-10
+                ${category.isAlphaCategory ? 'bg-orange-500' : 'bg-pink-500'}`}></div>
+            )}
+
+            <div class={`text-5xl mb-8 group-hover:scale-110 transition-transform duration-500 ${category.isExclusive ? 'mt-10' : ''}`}>
+                <div class="relative">
+                    {category.icon}
+                    {category.isExclusive && (
+                        <div class={`absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center text-[10px] shadow-sm animate-bounce
+                            ${category.isAlphaCategory ? 'bg-yellow-500 text-black border border-white/20' : 'bg-purple-500 text-white'}`}>
+                            🔒
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            <h3 class="text-3xl font-black dark:text-white text-gray-900 uppercase italic tracking-tighter mb-4 group-hover:text-cyan-500 transition-colors flex items-center gap-3">
+              {category.name}
+            </h3>
+
+            <div class="flex items-center gap-3 mb-6">
+                <span class={`text-[10px] font-black uppercase tracking-widest ${category.isExclusive ? (category.isAlphaCategory ? 'text-yellow-700 dark:text-yellow-400' : 'text-purple-600 dark:text-purple-400') : 'text-gray-400'}`}>
+                    {category.postCount} Intelligence Units
+                </span>
+                <span class={`px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest ${category.isExclusive ? (category.isAlphaCategory ? 'bg-yellow-500/20 text-yellow-800 dark:text-yellow-200' : 'bg-purple-500/20 text-purple-700 dark:text-purple-300') : 'bg-cyan-500/10 text-cyan-600'}`}>
+                    {category.categoryStatus}
+                </span>
+            </div>
+
+            <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase leading-relaxed mb-auto">
+              {category.description}
+            </p>
+
+            <!-- Metadata Terminal Layout -->
+            <div class="w-full mt-10 pt-8 border-t border-gray-100 dark:border-white/5">
+              <div class="flex items-center justify-between mb-4">
+                 <div class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Protocol_Security</div>
+                 <div class={`text-[9px] font-black uppercase tracking-widest italic animate-pulse
+                   ${category.isExclusive ? (category.isAlphaCategory ? 'text-yellow-500 shadow-[0_0_15px_rgba(234,179,8,0.6)]' : 'text-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]') : 'text-emerald-500'}`}>
+                   {category.isExclusive ? 'ENCRYPTED_GATED' : 'OPEN_SOURCE'}
+                 </div>
+              </div>
+
+              <!-- Compact Progress -->
+              <div class="flex items-center gap-3 mb-8">
+                <div class="flex-1 h-1.5 bg-gray-100 dark:bg-white/10 rounded-full overflow-hidden p-[1px]">
+                  <div class={`h-full rounded-full transition-all duration-1000
+                    ${category.isExclusive ? (category.isAlphaCategory ? 'bg-gradient-to-r from-yellow-300 to-yellow-600 shadow-[0_0_15px_rgba(234,179,8,0.6)]' : 'bg-gradient-to-r from-purple-400 to-pink-500 shadow-[0_0_10px_rgba(168,85,247,0.5)]') : 'bg-cyan-500'}`} 
+                    style={{"width": `${category.progressWidth}%`}}></div>
+                </div>
+                <span class="text-[8px] font-black text-gray-400 uppercase">{Math.round(category.progressWidth)}% Sync</span>
+              </div>
+
+              <!-- Gated Previews -->
+              <div class="space-y-2 mb-8">
+                <div class="text-[8px] font-black text-gray-400 uppercase tracking-widest mb-3 italic">Intelligence_Preview:</div>
+                {category.latestPosts.length > 0 ? (
+                    category.latestPosts.map(post => (
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-black/5 dark:bg-white/5 border border-transparent hover:border-white/10 transition-all">
+                            <span class="text-[10px] font-bold text-gray-400 uppercase italic line-clamp-1">{post.isExclusive ? 'REDACTED_CONTENT' : post.data.title}_</span>
+                            {category.isExclusive && <span class="text-[10px] opacity-40">🔒</span>}
+                        </div>
+                    ))
+                ) : category.isExclusive ? (
+                    <div class="space-y-1">
+                        <div class="p-2 rounded-lg bg-black/5 dark:bg-white/5 text-[9px] font-bold text-gray-400/50 uppercase italic flex justify-between">
+                            <span>{category.isAlphaCategory ? "ARBITRAGE_SEQ_001" : "META_GAME_MOD_X"}</span>
+                            <span>🔒</span>
+                        </div>
+                        <div class="p-2 rounded-lg bg-black/5 dark:bg-white/5 text-[9px] font-bold text-gray-400/50 uppercase italic flex justify-between">
+                            <span>{category.isAlphaCategory ? "INSIDER_WHITELIST" : "TOKENOMOICS_V3"}</span>
+                            <span>🔒</span>
+                        </div>
+                    </div>
+                ) : (
+                    <div class="p-3 rounded-xl bg-black/5 dark:bg-white/5 border border-transparent text-[10px] font-bold text-gray-400 uppercase italic">
+                        Fragments_Pending...
+                    </div>
+                )}
+              </div>
+
+              <a href={category.isExclusive ? "/newsletter" : `/categories/${category.slug}`} 
+                 class={`w-full py-4 text-[10px] font-black uppercase tracking-widest italic rounded-2xl flex items-center justify-center gap-2 transition-all group/link
+                 ${category.isExclusive ? (
+                   category.isAlphaCategory 
+                    ? 'bg-yellow-400 text-black hover:bg-white shadow-[0_10px_40px_rgba(234,179,8,0.3)] hover:shadow-[0_10px_50px_rgba(234,179,8,0.5)] font-black' 
+                    : 'bg-purple-600 text-white hover:bg-white hover:text-purple-600 shadow-[0_10px_30px_rgba(168,85,247,0.2)]'
+                 ) : 'bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 border border-transparent hover:border-cyan-500/30 hover:text-cyan-500'}`}>
+                <span>{category.isExclusive ? 'AUTHENTICATE_TO_UNLOCK_🔓' : 'ACCESS_MODULE_→'}</span>
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>

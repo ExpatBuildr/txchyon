@@ -1,107 +1,55 @@
-﻿---
-import Base from "@/layouts/Base.astro";
-import dateFormat from "@/lib/utils/dateFormat";
-import { Image } from "astro:assets";
-
-import { sortByDate } from "@/lib/utils/sortFunctions";
-import { humanize, slugify } from "@/lib/utils/textConverter";
-import { BiCalendarEdit, BiCategoryAlt } from "react-icons/bi";
-import AuthorSingle from "@/layouts/partials/AuthorSingle.astro";
-import { getSinglePage } from "@/lib/contentParser.astro";  // For authors
-import { getCollection } from "astro:content";           // ← ADD THIS LINE
+---
+// /authors/galaxy. The slug stays "galaxy" so old URLs and article matching keep working; the displayed name is ExpatBuildr.
+// Old version: src/pages/_archive/old-design/authors-single.astro.txt
+import { getCollection, render } from "astro:content";
+import Lab from "@/layouts/Lab.astro";
+import { slugify } from "@/lib/utils/textConverter";
 
 export async function getStaticPaths() {
-  const authors = await getSinglePage("authors");
-
-  const paths = authors.map((author) => ({
-    params: { single: author.slug || slugify(author.data.title) },
-    props: { author },
-  }));
-  return paths;
+  const authors = await getCollection("authors");
+  return authors
+    .filter((a) => a.slug === "galaxy")
+    .map((author) => ({ params: { single: author.slug }, props: { author } }));
 }
 
 const { author } = Astro.props;
-const { title, meta_title, description, image } = author.data;
+const { Content } = await render(author);
+const authorKey = slugify(author.data.title);
 
-// Author Posts - Use modern collection for posts
-const allPosts = await getCollection('posts', ({ data }) => !data.draft);
-const sortedPosts = sortByDate(allPosts);
-
-const currentPosts = sortedPosts.filter((post) => {
-  return post.data.authors
-    ?.map((auth) => slugify(auth))
-    .includes(slugify(title));
-});
+const posts = (await getCollection("posts", ({ data }) => !data.draft))
+  .filter((p) => (p.data.authors ?? []).map((a: string) => slugify(a)).includes(authorKey))
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+const latest = posts.slice(0, 10);
+const fmt = (x: Date | string) =>
+  new Date(x).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
 ---
 
-<Base
-  title={`${title} // System Architect // Txchyon OS`}
-  meta_title={meta_title}
-  description={description}
-  image={image}
+<Lab
+  title="ExpatBuildr | Txchyon"
+  description="ExpatBuildr builds the Txchyon trading app and writes its articles."
+  canonical="/authors/galaxy"
 >
-  <AuthorSingle author={author} />
+  <section class="lab-section first">
+    <p class="small mono"><a href="/authors">Authors</a> /</p>
+    <h1>ExpatBuildr</h1>
+    <div class="prose"><Content /></div>
+    <div class="chips">
+      <a href="https://x.com/expatbuilder" target="_blank" rel="noopener noreferrer">X</a>
+      <a href="https://github.com/ExpatBuildr" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </div>
+  </section>
 
-  {
-    currentPosts.length > 0 && (
-      <section class="section pt-0">
-        <div class="container">
-          <h2 class="mb-8 text-center h3">Recent Posts</h2>
-          <div
-            class={`row gy-4 ${currentPosts.length < 3 ? "justify-center" : ""}`}
-          >
-            {currentPosts.map((post) => (
-              <div class="col-12 sm:col-6 lg:col-4">
-                {post.data.image && (
-                  <a
-                    href={`/blog/${post.slug}`}
-                    class="rounded-lg block hover:text-primary overflow-hidden group"
-                  >
-                    <Image
-                      class="group-hover:scale-[1.05] transition duration-300 w-full"
-                      src={post.data.image}
-                      alt={post.data.title}
-                      width={445}
-                      height={230}
-                    />
-                  </a>
-                )}
-                <ul class="mt-4 text-text flex flex-wrap items-center text-sm">
-                  <li class="mb-2 mr-4 flex items-center flex-wrap font-medium">
-                    <BiCalendarEdit className="mr-1 h-[16px] w-[16px] text-gray-600" />
-                    {dateFormat(post.data.date!)}
-                  </li>
-                  <li class="mb-2 mr-4 flex items-center flex-wrap">
-                    <BiCategoryAlt className="mr-1 h-[16px] w-[16px] text-gray-600" />
-
-                    <ul>
-                      {post.data.categories?.map((category, i: number) => (
-                        <li class="inline-block">
-                          <a
-                            href={`/categories/${slugify(category)}`}
-                            class="mr-2 hover:text-primary font-medium"
-                          >
-                            {humanize(category)}
-                            {i !== post.data.categories.length - 1 && ","}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </li>
-                </ul>
-                <h3 class="h5">
-                  <a
-                    href={`/blog/${post.slug}`}
-                    class="block hover:text-primary transition duration-300"
-                  >
-                    {post.data.title}
-                  </a>
-                </h3>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    )
-  }
-</Base>
+  <section class="lab-section tight">
+    <h2>Latest articles</h2>
+    <div>
+      {latest.map((p) => (
+        <a class="entry" href={`/blog/${p.slug}`}>
+          <b>{p.data.title}</b>
+          <span class="desc">{p.data.description}</span>
+          <span class="meta">{fmt(p.data.date)}</span>
+        </a>
+      ))}
+    </div>
+    <p><a href="/blog">All {posts.length} articles →</a></p>
+  </section>
+</Lab>

@@ -1,0 +1,12 @@
+---
+import Base from "@/layouts/Base.astro";
+---
+
+<Base title="Authors">
+  <section class="section">
+    <div class="container text-center">
+      <h1 class="h2">Authors</h1>
+      <p>Author pages are temporarily unavailable.</p>
+    </div>
+  </section>
+</Base>

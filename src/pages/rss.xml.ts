@@ -11,8 +11,8 @@ export const GET: APIRoute = async ({ site }) => {
   const posts = await getCollection("posts", ({ data }) => !data.draft);
 
   return rss({
-    title: "Txchyon – On-Chain Alpha",
-    description: "High-conviction DeFi research, trading strategies, airdrops, and on-chain insights from a full-time trader.",
+    title: "Txchyon",
+    description: "A small lab that researches crypto trading strategies and builds the software to test them. Guides and lab notes.",
     site: site,
     stylesheet: false,
     customData: `<language>en-us</language>`,
@@ -23,7 +23,7 @@ export const GET: APIRoute = async ({ site }) => {
 
       return {
         title: String(post.data.title || "Untitled Post"),
-        description: String(post.data.description || "New on-chain alpha from Txchyon"),
+        description: String(post.data.description || "New article from Txchyon"),
         link: link,
         date: new Date(post.data.date).toISOString(),
       };

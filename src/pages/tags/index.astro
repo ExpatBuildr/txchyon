@@ -1,32 +1,20 @@
 ---
-import Base from "@/layouts/Base.astro";
+// /tags. Old version: src/pages/_archive/old-design/tags-index.astro.txt
+import Lab from "@/layouts/Lab.astro";
 import { getTaxonomy } from "@/lib/taxonomyParser.astro";
 import { humanize } from "@/lib/utils/textConverter";
 
-import { FaHashtag } from "react-icons/fa";
-
-const tags = await getTaxonomy("posts", "tags");
+const tags = (await getTaxonomy("posts", "tags")).sort();
 ---
 
-<Base title={"Tags"}>
-  <section class="section">
-    <div class="container text-center">
-      <h1 class="h2 page-heading">Tags</h1>
-      <ul class="space-x-4">
-        {
-          tags.map((tag) => (
-            <li class="inline-block">
-              <a
-                href={`/tags/${tag}`}
-                class="rounded-lg bg-light px-4 py-2 text-dark transition hover:bg-primary hover:text-white flex items-center group"
-              >
-                <FaHashtag className="mr-1 text-primary group-hover:text-white transition" />
-                {humanize(tag || "")}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
+<Lab title="Tags | Txchyon" description="Browse Txchyon articles by tag." canonical="/tags">
+  <section class="lab-section first">
+    <h1>Tags</h1>
+    <p class="lead">{tags.length} tags. For broader topics see the <a href="/categories">categories</a>.</p>
+  </section>
+  <section class="lab-section tight">
+    <div class="chips">
+      {tags.map((tag) => <a href={`/tags/${tag}`}>#{humanize(tag || "")}</a>)}
     </div>
   </section>
-</Base>
+</Lab>

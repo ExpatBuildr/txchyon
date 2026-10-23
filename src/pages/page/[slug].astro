@@ -1,44 +1,50 @@
 ---
+// /page/N: older paginated blog URLs (7 per page), kept so old links work. Canonical points at /blog.
+// Old version: src/pages/_archive/old-design/page-slug.astro.txt
 import { getCollection } from "astro:content";
-import Base from "@/layouts/Base.astro";
-import Pagination from "@/layouts/components/Pagination.astro";
-import Posts from "@/layouts/components/Posts.astro"; // CHANGED: Use Posts instead of PostCard
+import Lab from "@/layouts/Lab.astro";
+
+const postsPerPage = 7;
 
 export async function getStaticPaths() {
-  const allPosts = await getCollection('posts', ({ data }) => !data.draft);
-  const postsPerPage = 7;
-  const totalPages = Math.ceil(allPosts.length / postsPerPage);
-
+  const posts = await getCollection("posts", ({ data }) => !data.draft);
+  const totalPages = Math.ceil(posts.length / 7);
   const paths = [];
   for (let page = 2; page <= totalPages; page++) {
-    paths.push({
-      params: { slug: page.toString() },
-      props: { page },
-    });
+    paths.push({ params: { slug: page.toString() }, props: { page } });
   }
   return paths;
 }
 
-const { page = 1 } = Astro.props;
-
-const allPosts = await getCollection('posts', ({ data }) => !data.draft);
-const sortedPosts = allPosts.sort((a, b) => 
-  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+const { page } = Astro.props;
+const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
-
-const postsPerPage = 7;
-const start = (Number(page) - 1) * postsPerPage;
-const currentPosts = sortedPosts.slice(start, start + postsPerPage);
-const totalPages = Math.ceil(sortedPosts.length / postsPerPage);
+const current = posts.slice((page - 1) * postsPerPage, page * postsPerPage);
+const totalPages = Math.ceil(posts.length / postsPerPage);
+const href = (n: number) => (n === 1 ? "/blog" : `/page/${n}`);
+const fmt = (x: Date | string) =>
+  new Date(x).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
 ---
 
-<Base title={`Blog Page ${page}`}>
-  <section class="section">
-    <div class="container">
-      <!-- CHANGED: Use Posts component instead of inline HTML -->
-      <Posts posts={currentPosts} className="mb-16" />
-      
-      <Pagination totalPages={totalPages} currentPage={Number(page)} />
-    </div>
+<Lab title={`Blog archive, page ${page} | Txchyon`} description="Older Txchyon articles." canonical="/blog" noindex={true}>
+  <section class="lab-section first">
+    <h1>Blog archive</h1>
+    <p class="lead">Page {page} of {totalPages}. See the <a href="/blog">blog</a> for the current listing.</p>
   </section>
-</Base>
+  <section class="lab-section tight">
+    <div>
+      {current.map((p) => (
+        <a class="entry" href={`/blog/${p.slug}`}>
+          <b>{p.data.title}</b>
+          <span class="desc">{p.data.description}</span>
+          <span class="meta">{fmt(p.data.date)}</span>
+        </a>
+      ))}
+    </div>
+    <nav class="pager" aria-label="Archive pages">
+      <a href={href(page - 1)}>← Newer</a>
+      {page < totalPages ? <a href={href(page + 1)}>Older →</a> : <span class="off">Older →</span>}
+    </nav>
+  </section>
+</Lab>

@@ -1,12 +1,16 @@
 ---
-import Base from "@/layouts/Base.astro";
+// /authors. Old version: src/pages/_archive/old-design/authors-index.astro.txt
+import Lab from "@/layouts/Lab.astro";
 ---
 
-<Base title="Authors">
-  <section class="section">
-    <div class="container text-center">
-      <h1 class="h2">Authors</h1>
-      <p>Author pages are temporarily unavailable.</p>
-    </div>
+<Lab title="Authors | Txchyon" description="Who writes and builds Txchyon." canonical="/authors">
+  <section class="lab-section first">
+    <h1>Authors</h1>
   </section>
-</Base>
+  <section class="lab-section tight">
+    <a class="entry" href="/authors/galaxy">
+      <b>ExpatBuildr</b>
+      <span class="desc">Builds the Txchyon app and writes the articles.</span>
+    </a>
+  </section>
+</Lab>

@@ -1,0 +1,112 @@
+---
+import Base from "@/layouts/Base.astro";
+import SearchBar from "@/components/SearchBar.astro";
+
+// Glob all pages and guides
+const pageModules = import.meta.glob('../pages/**/*.{astro,md,mdx}', { eager: true });
+const guideModules = import.meta.glob('../../../guides/**/*.{md,mdx}', { eager: true });
+
+const allModules = { ...pageModules, ...guideModules };
+
+const searchList = Object.values(allModules)
+  .filter(mod => mod.frontmatter?.title && mod.file)  // Must have title and file path
+  .map(mod => {
+    // Read raw file content safely
+    let rawContent = '';
+    try {
+      rawContent = mod.rawContent?.() || mod.getRawContent?.() || '';
+      if (!rawContent && mod.file) {
+        // Fallback: read from file system (works in dev/build)
+        const fileContent = Deno.readTextFileSync(mod.file);
+        rawContent = fileContent || '';
+      }
+    } catch (e) {
+      console.warn(`Could not read content for ${mod.file}`);
+    }
+
+    // Build clean URL
+    let url = '/';
+    if (mod.url) {
+      url = mod.url;
+    } else if (mod.file) {
+      url = mod.file
+        .replace(/^.*src\/pages/, '')  // Remove path up to src/pages
+        .replace(/^.*guides/, '/guides')  // Map guides folder correctly
+        .replace(/\/index\.(astro|md|mdx)$/, '/')
+        .replace(/\.(astro|md|mdx)$/, '')
+        .replace(/\/$/, '') || '/';
+      if (!url.startsWith('/')) url = '/' + url;
+    }
+
+    return {
+      title: mod.frontmatter.title || 'Untitled',
+      description: mod.frontmatter.description || '',
+      content: rawContent.toLowerCase(),  // Lowercase for faster search
+      url: url,
+    };
+  });
+
+const title = "Search Documentation";
+const description = "Real-time search across all guides, tutorials, and documentation pages.";
+---
+
+<Base 
+  title={title}
+  description={description}
+>
+  <main id="main-content" class="min-h-[60vh] py-24 dark:bg-black bg-white">
+    <div class="container mx-auto px-4 max-w-4xl relative z-10">
+      <div class="text-center mb-16">
+        <div class="inline-flex items-center gap-2 mb-4 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20">
+          <span class="text-[8px] font-black text-cyan-500 uppercase tracking-widest italic">Protocol_Search_Active</span>
+        </div>
+        <h1 class="text-4xl md:text-6xl font-black dark:text-white text-gray-900 mb-6 italic tracking-tighter uppercase">
+          Search <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-purple-500">Documentation_</span>
+        </h1>
+        <p class="text-lg dark:text-gray-400 text-gray-600 mb-4 font-medium italic">
+          Find guides, tutorials, and research briefings in real-time.
+        </p>
+        <div class="text-[10px] font-black dark:text-gray-500 text-gray-400 uppercase tracking-widest">
+                Currently indexing {searchList.length} intelligence nodes
+        </div>
+      </div>
+      
+      <div class="mb-20">
+        <SearchBar searchList={searchList} client:load />
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="p-8 border dark:border-white/10 border-gray-200 rounded-3xl dark:bg-white/[0.02] bg-gray-50/50 backdrop-blur-sm group hover:border-cyan-500/30 transition-all">
+          <h3 class="font-black text-sm mb-4 italic uppercase tracking-wider dark:text-white">Quick Tips</h3>
+          <ul class="text-[11px] dark:text-gray-400 text-gray-600 space-y-3 font-medium italic">
+            <li class="flex gap-2"><span>⚡</span> Use at least 2 characters</li>
+            <li class="flex gap-2"><span>🔍</span> Try different keywords</li>
+            <li class="flex gap-2"><span>🎯</span> Check protocol spelling</li>
+          </ul>
+        </div>
+        
+        <div class="p-8 border dark:border-white/10 border-gray-200 rounded-3xl dark:bg-white/[0.02] bg-gray-50/50 backdrop-blur-sm group hover:border-purple-500/30 transition-all">
+          <h3 class="font-black text-sm mb-4 italic uppercase tracking-wider dark:text-white">Search Index</h3>
+          <ul class="text-[11px] dark:text-gray-400 text-gray-600 space-y-3 font-medium italic">
+            <li class="flex gap-2"><span>📖</span> Titles & descriptions</li>
+            <li class="flex gap-2"><span>🔡</span> Full-text content</li>
+            <li class="flex gap-2"><span>⌛</span> Real-time indexing</li>
+          </ul>
+        </div>
+        
+        <div class="p-8 border dark:border-white/10 border-gray-200 rounded-3xl dark:bg-white/[0.02] bg-gray-50/50 backdrop-blur-sm group hover:border-pink-500/30 transition-all">
+          <h3 class="font-black text-sm mb-4 italic uppercase tracking-wider dark:text-white">Need Help?</h3>
+          <p class="text-[11px] dark:text-gray-400 text-gray-600 mb-6 font-medium italic leading-relaxed">
+            Can't find what you're looking for? Try our global search page.
+          </p>
+          <a 
+            href="/search-results" 
+            class="inline-block px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:scale-105 transition-all italic text-center w-full"
+          >
+            Terminal Search →
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+</Base>

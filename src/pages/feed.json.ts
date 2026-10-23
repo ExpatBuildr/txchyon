@@ -26,7 +26,7 @@ export const GET: APIRoute = async ({ site }) => {
         id: url,
         url,
         title: String(post.data.title || 'Untitled Post'),
-        summary: String(post.data.description || 'New on-chain alpha from Txchyon'),
+        summary: String(post.data.description || 'New article from Txchyon'),
         date_published: new Date(post.data.date).toISOString(),
         image: imageUrl,
       };
@@ -37,8 +37,8 @@ export const GET: APIRoute = async ({ site }) => {
     JSON.stringify(
       {
         version: 'https://jsonfeed.org/version/1.1',
-        title: 'Txchyon – On-Chain Research',
-        description: 'High-conviction crypto research, trading strategies, and DeFi insights.',
+        title: 'Txchyon',
+        description: 'A small lab that researches crypto trading strategies and builds the software to test them. Guides and lab notes.',
         home_page_url: site.href,
         feed_url: new URL('/feed.json', site).href,
         icon: new URL('/favicon.ico', site).href,

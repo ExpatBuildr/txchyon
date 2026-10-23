@@ -162,7 +162,10 @@ const description = "A small lab that researches crypto trading strategies and b
       .all { font-weight: 600; color: var(--acc); text-decoration: underline; text-underline-offset: 4px; align-self: flex-start; }
       [hidden] { display: none !important; }
       footer { padding: 32px 0 48px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: 14px; color: var(--mut); }
-      footer .legal { max-width: 520px; }
+      footer .legal { max-width: 520px; display: flex; flex-direction: column; gap: 10px; }
+      footer .legal nav { display: flex; flex-wrap: wrap; gap: 6px 16px; }
+      footer .brand img { width: 24px; height: 24px; }
+      footer .brand span { font-size: 16px; }
       footer .foot-left { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
       .icons { display: flex; align-items: center; gap: 4px; }
       .icons a { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 999px; color: var(--mut); }
@@ -260,6 +263,10 @@ const description = "A small lab that researches crypto trading strategies and b
 
       <footer>
         <div class="foot-left">
+          <a href="/" class="brand">
+            <img src="/images/landing/logo.png" alt="" width="24" height="24" />
+            <span>Txchyon</span>
+          </a>
           <span>© 2026 Txchyon</span>
           <div class="icons">
             {socials.map((s) => (
@@ -270,10 +277,22 @@ const description = "A small lab that researches crypto trading strategies and b
           </div>
           <span>Built by <a href="https://x.com/expatbuilder" target="_blank" rel="noopener noreferrer">ExpatBuildr</a></span>
         </div>
-        <span class="legal">
-          Research and software only. Not investment advice. Nothing on this site is for sale, and we don't give signals or manage money. Some
-          older articles contain affiliate links; see the <a href="/disclaimer">disclaimer</a>.
-        </span>
+        <div class="legal">
+          <nav aria-label="Site">
+            <a href="/about">About</a>
+            <a href="/tools">Tools</a>
+            <a href="/newsletter">Newsletter</a>
+            <a href="/contact">Contact</a>
+            <a href="/privacy">Privacy</a>
+            <a href="/terms">Terms</a>
+            <a href="/disclaimer">Disclaimer</a>
+            <a href="/rss.xml">RSS</a>
+          </nav>
+          <span>
+            Research and software only. Not investment advice. Nothing on this site is for sale, and we don't give signals or manage money. Some
+            older articles contain affiliate links; see the <a href="/disclaimer">disclaimer</a>.
+          </span>
+        </div>
       </footer>
     </div>
 

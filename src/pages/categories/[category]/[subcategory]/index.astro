@@ -1,102 +1,55 @@
 ---
-import { getCollection } from 'astro:content';
-import PostCard from '@/components/PostCard.astro';
-import BaseLayout from '@/layouts/Base.astro';
-import { CATEGORY_HIERARCHY } from '@/lib/categories';
+// /categories/{category}/{subcategory}. Old version: src/pages/_archive/old-design/categories-subcategory.astro.txt
+import { getCollection } from "astro:content";
+import Lab from "@/layouts/Lab.astro";
+import { CATEGORY_HIERARCHY } from "@/lib/categories";
 
-// Generate paths for all valid category/subcategory combinations
 export async function getStaticPaths() {
   const paths = [];
-  
-  // Loop through each category
-  for (const [categorySlug, categoryData] of Object.entries(CATEGORY_HIERARCHY)) {
-    // Loop through each subcategory in this category
-    for (const [subcategorySlug, subcategoryName] of Object.entries(categoryData.subcategories)) {
-      paths.push({
-        params: {
-          category: categorySlug,
-          subcategory: subcategorySlug
-        }
-      });
+  for (const [category, c] of Object.entries(CATEGORY_HIERARCHY) as [string, any][]) {
+    for (const subcategory of Object.keys(c.subcategories ?? {})) {
+      paths.push({ params: { category, subcategory } });
     }
   }
-  
-  console.log(`DEBUG: Generated ${paths.length} subcategory paths`);
   return paths;
 }
 
 const { category, subcategory } = Astro.params;
+const cat: any = CATEGORY_HIERARCHY[category as string];
+const subName: string = cat.subcategories[subcategory as string] ?? (subcategory as string);
 
-// Get all posts
-const allPosts = await getCollection('posts');
+const posts = (
+  await getCollection("posts", ({ data }) => !data.draft && data.category === category && data.subcategory === subcategory)
+).sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 
-// Filter posts for this specific category AND subcategory
-const subcategoryPosts = allPosts
-  .filter(post => {
-    const matches = post.data.category === category && 
-                   post.data.subcategory === subcategory && 
-                   !post.data.draft;
-    
-    if (matches) {
-      console.log(`Found post for ${category}/${subcategory}: ${post.id}`);
-    }
-    
-    return matches;
-  })
-  .sort((a, b) => new Date(b.data.date) - new Date(a.data.date));
-
-// Get category metadata for display
-const categoryData = CATEGORY_HIERARCHY[category];
-const subcategoryName = categoryData?.subcategories[subcategory] || subcategory;
+const fmt = (x: Date | string) =>
+  new Date(x).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
 ---
 
-<BaseLayout>
-  <div class="container mx-auto px-4 py-8">
-    <!-- Breadcrumb -->
-    <nav class="mb-8 text-sm text-gray-600 dark:text-gray-400">
-      <a href="/" class="hover:text-blue-600 dark:hover:text-blue-400">Home</a>
-      <span class="mx-2">›</span>
-      <a href={`/categories/${category}`} class="hover:text-blue-600 dark:hover:text-blue-400">
-        {categoryData?.name || category}
-      </a>
-      <span class="mx-2">›</span>
-      <span class="text-gray-900 dark:text-gray-300 font-medium">{subcategoryName}</span>
-    </nav>
+<Lab
+  title={`${subName}, ${cat.name} | Txchyon`}
+  description={`${subName}: ${posts.length} ${posts.length === 1 ? "article" : "articles"} in ${cat.name} from the Txchyon lab.`}
+  canonical={`/categories/${category}/${subcategory}`}
+  noindex={posts.length === 0}
+>
+  <section class="lab-section first">
+    <p class="small mono"><a href="/categories">Categories</a> / <a href={`/categories/${category}`}>{cat.name}</a> /</p>
+    <h1>{subName}</h1>
+  </section>
 
-    <header class="mb-12">
-      <h1 class="text-4xl font-bold mb-4">
-        {categoryData?.icon || '📁'} {subcategoryName}
-      </h1>
-      
-      <p class="text-xl text-gray-600 dark:text-gray-400">
-        Posts in <span class="font-semibold">{categoryData?.name || category}</span> › <span class="font-semibold">{subcategoryName}</span>
-      </p>
-      
-      <div class="mt-8">
-        <p class="text-lg">
-          <span class="font-semibold">{subcategoryPosts.length}</span> 
-          {subcategoryPosts.length === 1 ? ' post' : ' posts'} in this subcategory
-        </p>
-      </div>
-    </header>
-
-    {subcategoryPosts.length > 0 ? (
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {subcategoryPosts.map(post => (
-          <PostCard post={post} />
+  <section class="lab-section tight">
+    {posts.length === 0 ? (
+      <p class="mut">No articles here yet. <a href={`/categories/${category}`}>Back to {cat.name}</a>.</p>
+    ) : (
+      <div>
+        {posts.map((p) => (
+          <a class="entry" href={`/blog/${p.slug}`}>
+            <b>{p.data.title}</b>
+            <span class="desc">{p.data.description}</span>
+            <span class="meta">{fmt(p.data.date)}</span>
+          </a>
         ))}
       </div>
-    ) : (
-      <div class="text-center py-12">
-        <div class="text-6xl mb-4">📭</div>
-        <h2 class="text-2xl font-semibold mb-2">No posts found</h2>
-        <p class="text-gray-600 dark:text-gray-400 max-w-md mx-auto">
-          No posts in the "{subcategoryName}" subcategory yet.
-          <a href={`/categories/${category}`} class="text-blue-600 dark:text-blue-400 hover:underline ml-1">
-            Browse all {categoryData?.name || category} posts
-          </a>
-        </p>
-      </div>
     )}
-  </div>
-</BaseLayout>
+  </section>
+</Lab>
