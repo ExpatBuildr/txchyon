@@ -1,0 +1,45 @@
+---
+// Redirect pages for old single-segment URLs such as /blog/some-article -> /blog/category/some-article.
+// Cloudflare Pages only applies the first ~120 rules of public/_redirects, so the rest of the legacy
+// /blog/<slug> rules are also generated here as static pages. If the host applies the _redirects rule first,
+// this page is simply never served.
+import fs from "node:fs";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const text = fs.readFileSync("public/_redirects", "utf8").replace(/^﻿/, "");
+  // only redirect to articles that exist; anything else goes to the homepage
+  const published = new Set((await getCollection("posts", ({ data }) => !data.draft)).map((p) => `/blog/${p.slug}`));
+  const seen = new Set<string>();
+  const paths: { params: { legacy: string }; props: { target: string } }[] = [];
+  for (const line of text.split(/\r?\n/)) {
+    if (!line.trim() || line.trim().startsWith("#")) continue;
+    const [from, to] = line.trim().split(/\s+/);
+    const m = from?.match(/^\/blog\/([^/*:]+)$/);
+    if (!m || !to || !to.startsWith("/") || seen.has(m[1]) || m[1] === "page") continue;
+    seen.add(m[1]);
+    paths.push({ params: { legacy: m[1] }, props: { target: to.startsWith("/blog/") && !published.has(to.replace(/\/$/, "")) ? "/" : to } });
+  }
+  return paths;
+}
+
+const { target } = Astro.props;
+const url = "https://txchyon.com" + target;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting…</title>
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href={url} />
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+  </head>
+  <body>
+    <p>Redirecting to <a href={target}>{url}</a>…</p>
+    <script is:inline define:vars={{ target }}>
+      location.replace(target);
+    </script>
+  </body>
+</html>
