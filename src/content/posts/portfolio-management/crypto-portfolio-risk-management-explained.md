@@ -11,7 +11,7 @@ tags: ["Crypto Portfolio", "Risk Management", "Drawdowns", "Bitcoin", "Ethereum"
 category: "portfolio-management"
 subcategory: "risk-management"
 draft: false
-hasGatedContent: true
+hasGatedContent: false
 gateType: 'partial'
 ---
 

@@ -6,7 +6,7 @@ updatedDate: 2025-12-15
 image: "/images/posts/triadebitcrop.jpg"
 heroImageAlt: "debitcard"
 authors: ["Galaxy"]
-authorTwitter: "@galaxybuilt"
+authorTwitter: "@expatbuilder"
 tags: ["crypto", "debit card", "crypto debit card", "rewards", "beginner guide"]
 category: "getting-started"
 subcategory: "first-purchase"

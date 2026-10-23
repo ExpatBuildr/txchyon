@@ -6,7 +6,7 @@ updatedDate: 2025-12-12
 image: "/images/posts/pumpfun2.jpg"
 heroImageAlt: "Pumpfun iconic pill image"
 authors: ["Galaxy"]
-authorTwitter: "@galaxybuilt"
+authorTwitter: "@expatbuilder"
 tags: ["Pumpfun", "Memecoin Launch", "Solana", "Crypto Creation", "Community Building", "Project Ascend", "Creator Fees"]
 category: "defi-yield"
 subcategory: "structured-products"

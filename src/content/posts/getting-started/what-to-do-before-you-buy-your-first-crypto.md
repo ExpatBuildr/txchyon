@@ -11,7 +11,7 @@ tags: ["crypto-basics", "first-purchase", "wallet-setup", "security", "memecoins
 category: "getting-started"
 subcategory: "first-purchase"
 draft: false
-hasGatedContent: true
+hasGatedContent: false
 gateType: 'partial'
 ---
 

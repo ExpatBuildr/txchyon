@@ -11,7 +11,7 @@ tags: ["prediction-markets", "passive-income", "liquidity", "kalshi"]
 category: "prediction-markets"
 subcategory: "liquidity-providing"
 draft: false
-hasGatedContent: true
+hasGatedContent: false
 gateType: 'partial'
 ---
 

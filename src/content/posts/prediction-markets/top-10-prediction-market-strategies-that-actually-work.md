@@ -11,7 +11,7 @@ tags: ["prediction-markets", "trading-strategies", "crypto"]
 category: "prediction-markets"
 subcategory: "event-strategies"
 draft: false
-hasGatedContent: true
+hasGatedContent: false
 gateType: 'partial'
 ---
 

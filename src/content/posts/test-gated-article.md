@@ -17,7 +17,7 @@ tags:
 category: "airdrop-farming"
 subcategory: "eligibility-optimization"
 draft: true
-hasGatedContent: true
+hasGatedContent: false
 gateType: 'partial'
 ---
 

@@ -16,7 +16,7 @@ tags:
 category: "alpha-insider"
 subcategory: "early-dex-arbitrage"
 draft: false
-hasGatedContent: true
+hasGatedContent: false
 gateType: 'partial'
 ---
 

@@ -11,7 +11,7 @@ tags: ["Crypto Portfolio", "Tax-Loss Harvesting", "Tax Optimization", "Rebalanci
 category: "portfolio-management"
 subcategory: "tax-loss-harvesting"
 draft: false
-hasGatedContent: true
+hasGatedContent: false
 gateType: 'partial'
 ---
 

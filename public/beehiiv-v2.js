@@ -1,5 +1,5 @@
 /**
- * GalaxyBuilt — Beehiiv Proxy Utility
+ * Txchyon — Beehiiv Proxy Utility
  * Client-side subscription handler. 
  * Routes requests through /api/subscribe to avoid CORS and protect API keys.
  */

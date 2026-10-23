@@ -6,7 +6,7 @@ updatedDate: 2025-12-15
 image: "/images/posts/smartcontractcrop.jpg"
 heroImageAlt: "Two programmers reviewing complex blockchain code on a split screen with EVM and Solana logos"
 authors: ["Galaxy"]
-authorTwitter: "@galaxybuilt"
+authorTwitter: "@expatbuilder"
 tags: ["Smart Contract Audit", "EVM", "Solana", "Solidity", "Rust", "Anchor", "DeFi Security", "Vulnerability", "Security Tools"]
 category: "security-privacy"
 subcategory: "transaction-security"

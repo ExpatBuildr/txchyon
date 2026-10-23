@@ -12,7 +12,7 @@ category: "airdrop-farming"
 subcategory: "points-systems"
   # Keep existing tags: "airdrop", "research", "defi", "speculation", "solana", "security"
 draft: false
-hasGatedContent: true
+hasGatedContent: false
 gateType: 'partial'
 ---
 

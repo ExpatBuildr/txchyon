@@ -1,33 +1,33 @@
 ---
-title: "Introducing Txchyon Capital – My Private On-Chain Alpha Research & Media Firm"
-description: "I’m going fully on-chain with my research, trading, and media business. Welcome to Txchyon Capital: the private fund and alpha blog that turns real positions, real PnL, and real edge into the sharpest public (and private) crypto research on the internet."
+title: "Introducing Txchyon – My Private On-Chain Alpha Research & Media Firm"
+description: "I’m going fully on-chain with my research, trading, and media business. Welcome to Txchyon: the private fund and alpha blog that turns real positions, real PnL, and real edge into the sharpest public (and private) crypto research on the internet."
 date: 2025-11-27
 updatedDate: 2025-12-02 
 image: "/images/posts/iopn2.jpg"
-heroImageAlt: "Txchyon Capital logo glowing on a dark asteroid field with Aster and Bitcoin charts in the background"
+heroImageAlt: "Txchyon logo glowing on a dark asteroid field with Aster and Bitcoin charts in the background"
 authors: ["Galaxy"]
-authorTwitter: "@galaxybuilt"
-tags: ["Txchyon", "Txchyon Capital", "Aster", "Bitcoin", "On-Chain Alpha", "Research", "Media", "DeFi", "Private Fund"]
+authorTwitter: "@expatbuilder"
+tags: ["Txchyon", "Aster", "Bitcoin", "On-Chain Alpha", "Research", "Media", "DeFi", "Private Fund"]
 sticky: true
 category: "research-analysis"
   # Keep: "announcement", "research"
 draft: false
 ---
 
-![Txchyon Capital Launch](/images/posts/txchyon-launch.jpg)
+![Txchyon Launch](/images/posts/txchyon-launch.jpg)
 
 ## I’m Putting My Name, Face, and Balance Sheet Fully On-Chain
 
 After years of trading, farming, and quietly printing in DeFi under various pseudonyms, I’m consolidating everything under one roof.
 
-Today I’m proud to launch **Txchyon Capital** – my personal, privately owned on-chain investment fund and research/media arm.
+Today I’m proud to launch **Txchyon** – my personal, privately owned on-chain investment fund and research/media arm.
 
 No team.  
 No employees.  
 No VCs.  
 Just me, my wallets, my positions, and the sharpest alpha I can find or create.
 
-## What Txchyon Capital Actually Is
+## What Txchyon Actually Is
 
 A one-man research powerhouse with three core pillars:
 
@@ -79,7 +79,7 @@ I’m planting my flag:
 
 ## How to Stay in the Loop
 
-- Follow me on X: [@galaxybuilt](https://twitter.com/@galaxybuilt)  
+- Follow me on X: [@expatbuilder](https://x.com/expatbuilder)  
  Bookmark the research blog: https://txchyon.com
  Turn on notifications — new alpha drops 2–4× per week  
 
@@ -91,10 +91,10 @@ The age of fake gurus and paid shills is dying.
 
 The age of on-chain, verifiable, skin-in-the-game alpha is just beginning.
 
-Welcome to Txchyon Capital.
+Welcome to Txchyon.
 
 Let’s build something real.
 
 — Galaxy  
-Sole Owner & Operator, Txchyon Capital  
+Sole Owner & Operator, Txchyon  
 26 Nov 2025

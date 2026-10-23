@@ -6,7 +6,7 @@ updatedDate: 2025-12-02
 image: "/images/posts/vooi.jpg"
 heroImageAlt: "VOOI dashboard showing $20B+ volume, 26× oversubscribed Cookie sale, and pre-market price action"
 authors: ["Galaxy"]
-authorTwitter: "@galaxybuilt"
+authorTwitter: "@expatbuilder"
 tags: ["VOOI", "Perps", "DeFi", "TGE", "Airdrop", "Chain Abstraction", "Cookie Launchpad"]
 category: "defi-yield"
 subcategory: "yield-aggregators"
@@ -129,4 +129,4 @@ See you on the other side.
 Trade safe, size responsibly, and I’ll see you at $1B.
 
 — Galaxy  
-Follow @galaxybuilt for more alpha drops.
+Follow @expatbuilder for more alpha drops.

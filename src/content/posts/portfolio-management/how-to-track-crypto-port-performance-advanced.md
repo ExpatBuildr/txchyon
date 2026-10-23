@@ -11,7 +11,7 @@ tags: ["Crypto Portfolio", "Performance Tracking", "Benchmarking", "Returns", "R
 category: "portfolio-management"
 subcategory: "performance-tracking"
 draft: false
-hasGatedContent: true
+hasGatedContent: false
 gateType: 'partial'
 ---
 

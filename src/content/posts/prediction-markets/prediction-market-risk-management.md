@@ -11,7 +11,7 @@ tags: ["prediction-markets", "risk-management", "trading"]
 category: "prediction-markets"
 subcategory: "bankroll-management"
 draft: false
-hasGatedContent: true
+hasGatedContent: false
 gateType: 'partial'
 ---
 

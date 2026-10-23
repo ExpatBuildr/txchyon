@@ -6,13 +6,13 @@ updatedDate: 2025-12-02
 image: "/images/posts/poly.jpg"
 heroImageAlt: "Polymarket logo and prediction market interface with USDC bets on Polygon"
 authors: ["Galaxy"]
-authorTwitter: "@galaxybuilt"
+authorTwitter: "@expatbuilder"
 tags: ["polymarket", "poly", "airdrop", "prediction-markets", "polygon", "gpoly", "crypto-guide"]
 category: "airdrop-farming"
 subcategory: "points-systems"
   # Keep existing tags: "airdrop", "research", "defi", "speculation", "solana", "security"
 draft: false
-hasGatedContent: true
+hasGatedContent: false
 gateType: 'partial'
 ---
 

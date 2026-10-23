@@ -6,7 +6,7 @@ updatedDate: 2025-12-20
 image: "/images/posts/coldwallet.jpg"
 heroImageAlt: "A physical hardware wallet (cold storage) next to a computer screen showing a digital software wallet (hot storage)"
 authors: ["Galaxy"]
-authorTwitter: "@galaxybuilt"
+authorTwitter: "@expatbuilder"
 tags: ["Wallet Security", "Hardware Wallet", "Cold Storage", "Solana", "Phantom", "Solflare", "Ledger", "Trezor", "Keystone", "Tangem"]
 category: "security-privacy"
 subcategory: "hardware-wallets"

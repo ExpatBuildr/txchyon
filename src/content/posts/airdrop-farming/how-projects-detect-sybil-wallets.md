@@ -16,7 +16,7 @@ tags:
 category: "airdrop-farming"
 subcategory: "points-systems"
 draft: false
-hasGatedContent: true
+hasGatedContent: false
 gateType: 'partial'
 ---
 

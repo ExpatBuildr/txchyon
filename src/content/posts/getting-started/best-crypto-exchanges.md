@@ -6,7 +6,7 @@ updatedDate: 2025-12-04
 image: "/images/posts/exchanges.jpg"
 heroImageAlt: "2026 crypto exchange comparison chart showing Binance, Bybit, KuCoin, Kraken, Coinbase, Uniswap, Raydium and Jupiter logos"
 authors: ["Galaxy"]
-authorTwitter: "@galaxybuilt"
+authorTwitter: "@expatbuilder"
 tags: ["crypto exchanges 2026", "best place to buy bitcoin 2026", "buy altcoins 2026", "lowest fee crypto exchange", "binance referral bonus", "bybit bonus", "kucoin bonus", "kraken vs coinbase 2026", "us crypto exchanges", "best dex 2026", "uniswap", "raydium", "jupiter solana", "decentralized exchange"]
 sticky: true
 category: "getting-started"

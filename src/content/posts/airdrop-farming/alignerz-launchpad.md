@@ -6,7 +6,7 @@ updatedDate: 2025-12-02
 image: "/images/posts/alignerz.jpg"
 heroImageAlt: "AlignerZ logo with IWO pools, TVS NFTs, and Wallchain Quacks leaderboard"
 authors: ["Galaxy"]
-authorTwitter: "@galaxybuilt"
+authorTwitter: "@expatbuilder"
 tags: ["AlignerZ", "A26Z", "Launchpad", "IWO", "TVS", "Wallchain", "Airdrop", "Polygon", "AttentionFi"]
 sticky: true
 category: "airdrop-farming"
@@ -19,7 +19,7 @@ draft: false
 
 **Author:** ExpatBuildr  
 **Date:** November 25, 2025  
-**Follow me on X:** [@galaxybuilt](https://x.com/galaxybuilt)  
+**Follow me on X:** [@expatbuilder](https://x.com/expatbuilder)  
 
 ## The Problem With Every Launchpad You’ve Ever Used
 
@@ -102,7 +102,7 @@ Get in the airdrop now while it’s still early.
 **Your move:**  
 1. Click → [https://quacks.app/?ref=GalaxyBuilt](https://quacks.app/?ref=GalaxyBuilt)  
 2. Start quacking  
-3. Follow [@galaxybuilt](https://x.com/galaxybuilt) for daily updates  
+3. Follow [@expatbuilder](https://x.com/expatbuilder) for daily updates  
 4. Share this post so more people discover real alignment
 
 Let’s build the future that actually lasts.

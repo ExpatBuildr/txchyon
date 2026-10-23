@@ -319,3 +319,52 @@
 # Shop waitlist page archived
 # /New folder  /  301 (literal space is not valid in a redirect source; only the encoded rule below is active)
 /New%20folder  /  301
+
+# Broken internal links found in article text: send to the matching article, otherwise the homepage
+/airdrop-farming/airdrop-points-case-studies  /blog/airdrop-farming/airdrop-points-case-studies  301
+/airdrop-farming/avoiding-red-flags-wallet-hygiene-and-compliance  /blog/airdrop-farming/avoiding-red-flags-wallet-hygiene-and-compliance  301
+/airdrop-farming/cold-vs-hot-wallets-optimizing-security-and-eligibility  /blog/airdrop-farming/cold-vs-hot-wallets-optimizing-security-and-eligibility  301
+/airdrop-farming/how-projects-detect-sybil-wallets  /blog/airdrop-farming/how-projects-detect-sybil-wallets  301
+/airdrop-farming/how-to-track-airdrop-points  /blog/airdrop-farming/how-to-track-airdrop-points  301
+/airdrop-farming/mastering-wallet-diversification-for-airdrop-farming  /blog/airdrop-farming/mastering-wallet-diversification-for-airdrop-farming  301
+/airdrop-farming/optimizing-airdrop-points  /  301
+/airdrop-farming/optimizing-airdrop-points-safely  /blog/airdrop-farming/optimizing-airdrop-points-safely  301
+/airdrop-farming/time-vs-volume-points-systems  /blog/airdrop-farming/time-vs-volume-points-systems  301
+/airdrop-farming/wallet-management-best-practices-for-airdrop-farmers  /blog/airdrop-farming/wallet-management-best-practices-for-airdrop-farmers  301
+/airdrop-farming/wallet-strategy/avoiding-red-flags-wallet-hygiene-and-compliance  /blog/airdrop-farming/avoiding-red-flags-wallet-hygiene-and-compliance  301
+/airdrop-farming/wallet-strategy/cold-vs-hot-wallets-optimizing-security-and-eligibility  /blog/airdrop-farming/cold-vs-hot-wallets-optimizing-security-and-eligibility  301
+/airdrop-farming/wallet-strategy/mastering-wallet-diversification-for-airdrop-farming  /blog/airdrop-farming/mastering-wallet-diversification-for-airdrop-farming  301
+/airdrop-farming/wallet-strategy/wallet-management-best-practices-for-airdrop-farmers  /blog/airdrop-farming/wallet-management-best-practices-for-airdrop-farmers  301
+/airdrop-farming/what-actions-earn-airdrop-points  /blog/airdrop-farming/what-actions-earn-airdrop-points  301
+/alpha-insider/cross-chain-alpha-arbitrage/multi-chain-arbitrage-guide  /  301
+/alpha-insider/cross-chain-early-arbitrage  /blog/alpha-insider/cross-chain-early-arbitrage  301
+/alpha-insider/early-dex-arbitrage/capital-allocation-scaling  /blog/alpha-insider/capital-allocation-scaling  301
+/alpha-insider/early-dex-arbitrage/cross-chain-early-arbitrage  /blog/alpha-insider/cross-chain-early-arbitrage  301
+/alpha-insider/early-dex-arbitrage/front-running-anti-bot  /blog/alpha-insider/front-running-anti-bot  301
+/alpha-insider/early-dex-arbitrage/gas-execution-optimization  /blog/alpha-insider/gas-execution-optimization  301
+/alpha-insider/early-dex-arbitrage/liquidity-pool-analysis-alpha  /blog/alpha-insider/liquidity-pool-analysis-alpha  301
+/alpha-insider/early-dex-arbitrage/spot-new-dex-pairs  /blog/alpha-insider/spot-new-dex-pairs  301
+/alpha-insider/on-chain-analytics-wallet-shadowing/wallet-tracking-guide  /  301
+/alpha-insider/smart-contract-sniping/contract-sniping-basics  /  301
+/bitcoin-ordinals-brc20-runes-beginners-2026  /  301
+/bitcoin-privacy-best-practices  /  301
+/blog/alpha-insider/high-frequency-airdrops  /  301
+/blog/alpha-insider/insider-governance-dao-plays  /  301
+/blog/alpha-insider/memecoin-nft-whitelists  /  301
+/blog/alpha-insider/on-chain-analytics-wallet-shadowing  /  301
+/blog/alpha-insider/private-testnet-beta-exploits  /  301
+/blog/alpha-insider/token-launch-fair-launch-tactics  /  301
+/blog/getting-started/10-biggest-crypto-mistakes-beginners-make-in-2026  /  301
+/blog/getting-started/best-crypto-wallets-for-beginners-in-2026  /  301
+/blog/getting-started/cold-vs-hot-wallets-optimizing-security-and-eligibility  /blog/airdrop-farming/cold-vs-hot-wallets-optimizing-security-and-eligibility  301
+/blog/getting-started/crypto-fees-explained-gas-slippage-hidden-costs  /  301
+/blog/getting-started/dollar-cost-averaging-explained-the-best-strategy-for-crypto-beginners-in-2026  /  301
+/blog/getting-started/how-to-buy-ethereum-for-beginners-complete-step-by-step-guide-2026  /  301
+/blog/getting-started/how-to-transfer-crypto-from-exchange-to-wallet-safely-in-2026  /  301
+/how-to-setup-xverse-wallet  /  301
+/how-to-store-your-seed-phrase-safely  /  301
+/screenshots/top10coinmarketcap.jpg  /screenshots/top10coinmarketcap.jpeg  301
+/wallet-hub  /  301
+
+# Removed tag
+/tags/txchyon-capital  /tags/txchyon  301

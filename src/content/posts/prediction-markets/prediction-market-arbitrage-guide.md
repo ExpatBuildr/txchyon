@@ -11,7 +11,7 @@ tags: ["prediction-markets", "arbitrage", "trading"]
 category: "prediction-markets"
 subcategory: "arbitrage-opportunities"
 draft: false
-hasGatedContent: true
+hasGatedContent: false
 gateType: 'partial'
 ---
 

@@ -6,7 +6,7 @@ updatedDate: 2025-12-22
 image: "/images/posts/worm-wtf.png"
 heroImageAlt: "Worm.wtf platform screenshot showing trending prediction markets"
 authors: ["Galaxy"]
-authorTwitter: "@galaxybuilt"
+authorTwitter: "@expatbuilder"
 tags: ["prediction-markets", "solana", "crypto"]
 category: "prediction-markets"
 subcategory: "platform-guides"

@@ -16,7 +16,7 @@ tags:
 category: "research-analysis"
 subcategory: "tokenomics-analysis"
 draft: false
-hasGatedContent: true
+hasGatedContent: false
 gateType: 'partial'
 ---
 

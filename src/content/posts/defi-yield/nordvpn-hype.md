@@ -12,7 +12,7 @@ category: "defi-yield"
 subcategory: "yield-aggregators"
   # Keep: "defi", "research", "solana", "evm"
 draft: false
-hasGatedContent: true
+hasGatedContent: false
 gateType: 'partial'
 ---
 
@@ -84,7 +84,7 @@ Drop a comment if you want the same guide for Drift, Aster, GMX, or Bybit — al
 
 Stay safe out there.
 
-— Galaxy (@galaxybuilt)  
+— ExpatBuildr (@expatbuilder)  
 txchyon.com
 
 *(When you’re ready to grab NordVPN, use my link again — it’s the cheapest you’ll ever see it and keeps these guides coming.)*

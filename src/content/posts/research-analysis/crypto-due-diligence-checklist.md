@@ -16,7 +16,7 @@ tags:
 category: "research-analysis"
 subcategory: "due-diligence-framework"
 draft: false
-hasGatedContent: true
+hasGatedContent: false
 gateType: 'partial'
 ---
 

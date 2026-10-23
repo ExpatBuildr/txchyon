@@ -11,7 +11,7 @@ tags: ["bitcoin", "bitcoin node", "hardware", "full node", "reviews"]
 category: "infrastructure-tech"
 subcategory: "layer-1s"
 draft: false
-hasGatedContent: true
+hasGatedContent: false
 gateType: 'partial'
 ---
 

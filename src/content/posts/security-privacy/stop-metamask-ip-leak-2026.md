@@ -6,7 +6,7 @@ updatedDate: 2025-12-08
 image: "/images/posts/metamask.jpg"
 heroImageAlt: "MetaMask settings screen showing Infura RPC with red warning overlay"
 authors: ["Galaxy"]
-authorTwitter: "@galaxybuilt"
+authorTwitter: "@expatbuilder"
 tags: ["MetaMask", "Privacy", "IP Leak", "RPC", "VPN", "Rabby Wallet", "Ethereum", "DeFi Security"]
 category: "security-privacy"
 subcategory: "privacy-tools"
@@ -77,5 +77,5 @@ Pick any one of the three and you're invisible again in under five minutes.
 
 See you on-chain (anonymously).
 
-— Galaxy (@galaxybuilt)  
+— ExpatBuildr (@expatbuilder)  
 Say gm → contact@txchyon.com
